@@ -1,0 +1,64 @@
+<div class="p-4">
+  <p-card>
+    <ng-template pTemplate="header">
+      <h5 class="text-lg font-semibold p-5 !pb-0">Advance Support / Resistance</h5>
+    </ng-template>
+
+    <!-- Form Section -->
+    <form class="space-y-4" #f="ngForm">
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div class="col-span-1">
+          <label for="selected_date" class="block mb-1 font-bold">Date</label>
+          <p-datepicker [(ngModel)]="selected_date" inputId="selected_date" name="selected_date" dateFormat="yy-mm-dd"
+            [showIcon]="true" styleClass="w-full rounded-lg" inputStyleClass="w-full" (onSelect)="initialfetch()">
+          </p-datepicker>
+        </div>
+      </div>
+    </form>
+
+  </p-card>
+</div>
+
+<!-- If Data Available -->
+<div *ngIf="data_available" class="p-4">
+  <div class="flex flex-col md:flex-row justify-center items-start gap-6 p-6  min-h-screen">
+
+    <!-- Loop through keys (NIFTY, BANKNIFTY, FINNIFTY) -->
+    <div *ngFor="let key of objectKeys(resistancedata)"
+      class="border border-surface-300 rounded-2xl shadow-md w-full md:w-1/3 transition-transform hover:scale-[1.02]">
+
+      <h6 class=" text-lg text-center font-semibold p-4 !pb-0"> {{ key }}</h6>
+
+      <!-- Support / Resistance Table -->
+      <div class="grid grid-cols-2 text-center font-semibold rounded-b-2xl overflow-hidden">
+
+        <!-- Support -->
+        <div class="flex flex-col w-full">
+          <div class="py-2 bg-green-300">S1 {{ resistancedata[key]?.s1 || '-' }}</div>
+          <div class="py-2 bg-green-400">S2 {{ resistancedata[key]?.s2 || '-' }}</div>
+          <div class="py-2 bg-green-500">S3 {{ resistancedata[key]?.s3 || '-' }}</div>
+          <div class="py-2 bg-green-600">S4 {{ resistancedata[key]?.s4 || '-' }}</div>
+        </div>
+
+        <!-- Resistance -->
+        <div class="flex flex-col w-full">
+          <div class="py-2 bg-red-300">R1 {{ resistancedata[key]?.r1 || '-' }}</div>
+          <div class="py-2 bg-red-400">R2 {{ resistancedata[key]?.r2 || '-' }}</div>
+          <div class="py-2 bg-red-500">R3 {{ resistancedata[key]?.r3 || '-' }}</div>
+          <div class="py-2 bg-red-600">R4 {{ resistancedata[key]?.r4 || '-' }}</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+
+</div>
+
+<!-- No Data -->
+<div *ngIf="!data_available" class="p-4">
+  <p-card class="p-5 text-center">
+    <p>No Data Available !!</p>
+  </p-card>
+</div>

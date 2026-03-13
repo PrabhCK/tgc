@@ -1,0 +1,72 @@
+/* Horizontal menu hover style */
+.custom-menubar{
+  border: none;
+  background: #010082;
+}
+.custom-menubar .p-menubar-root-list > .p-menuitem {
+  position: relative;
+  color: white !important;
+  
+}
+
+::ng-deep  .p-menubar-root-list > .p-menubar-item > .p-menubar-item-content > .p-menubar-item-link {
+    color: white !important;
+    background: #010082;
+
+}
+
+.custom-menubar .p-menuitem-submenu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  border: none;
+  background: #010082;
+  color:white;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  z-index: 1000;
+}
+
+.custom-menubar .p-menuitem:hover > .p-menuitem-submenu {
+  display: block;
+  color: white;
+}
+
+.custom-menubar .p-menuitem-submenu .p-menuitem {
+  width: 200px;
+}
+
+.custom-menubar .p-menuitem-submenu .p-menuitem-content {
+  padding: 0.5rem 1rem;
+}
+
+.custom-menubar .p-menuitem-submenu .p-menuitem-content:hover {
+  background: var(--primary-50);
+}
+.layout-topbar-logo img {
+  height: 81px;   /* adjust as needed */
+  width: auto;
+}
+::ng-deep .p-menubar-item:not(.p-disabled) > .p-menubar-item-content:hover {
+    color: white !important;
+    background:#FF8B1B !important;
+}
+/* Highlight active (selected) menu item */
+::ng-deep .custom-menubar .p-menubar-root-list > .p-menuitem.active > .p-menuitem-content {
+  background-color: #FF8B1B !important;
+  color: white !important;
+  border-radius: 4px;
+}
+
+/* Keep hover consistent */
+::ng-deep .custom-menubar .p-menubar-root-list > .p-menuitem:not(.p-disabled):hover > .p-menuitem-content {
+  background-color: #FF8B1B !important;
+  color: white !important;
+}
+::ng-deep .p-menubar-item-icon{
+  color: white !important;
+  :active{
+    background-color: #FF8B1B !important;
+  }
+}

@@ -1,0 +1,14 @@
+// Target all p-button elements within this component's scope
+:host ::ng-deep { // or use regular CSS selectors if encapsulation is off
+    .p-button {
+        // Change the background and border for the button
+        background: #0EA5E9 !important; /* Example: Deep Orange */
+        border-color: #0EA5E9 !important;
+    }
+
+    .p-button:hover {
+        background: #07a0e7 !important; /* Darker shade for hover */
+        border-color: #07a0e7 !important;
+    }
+    
+}

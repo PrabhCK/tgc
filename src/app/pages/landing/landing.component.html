@@ -1,0 +1,637 @@
+<!-- ***** Header Area Start ***** -->
+<header class="header-area " data-wow-duration="0.75s" data-wow-delay="0s">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <nav class="main-nav">
+          <!-- ***** Logo Start ***** -->
+          <a href="index.html" class="logo">
+            <img src="assets/images/logo.gif" style="height: 188px;width: 172px;margin-top: -48px;">
+          </a>
+          <!-- ***** Logo End ***** -->
+          <!-- ***** Menu Start ***** -->
+          <ul *ngIf="!isMobile" class="nav">
+            <li class="scroll-to-section"><a (click)="currentRoute='home'" class="active">Home</a></li>
+            <!-- <li class="scroll-to-section"><a (click)="scrollTo('service');currentRoute='home'">Services</a></li>
+            <li class="scroll-to-section"><a (click)="scrollTo('about');currentRoute='home'">About</a></li> -->
+            <!-- <li class="scroll-to-section"><a (click)="scrollTo('pricing')">Pricing</a></li> -->
+            <div class="gradient-button me-2"><a routerLink="/auth/login">Login</a></div>
+            <div class="gradient-button"><a routerLink="/auth/register">Register</a></div>
+          </ul>
+          <div class="custom-bg" [style.display]="isMenuOpen ? '' : 'none'" *ngIf="isMobile">
+            <div class="flex flex-column gap-3">
+              <a (click)="currentRoute='home'" >Home</a>
+              <a class="btn custom-button " routerLink="/auth/login" >Login</a>
+              <a class="btn custom-button "> <span routerLink="/auth/register" >Register</span></a>
+
+            </div>
+          </div>
+          <a class='menu-trigger' [class.active]="isMenuOpen" (click)="toggleMenu()">
+            <span>Menu</span>
+          </a>
+          <!-- ***** Menu End ***** -->
+        </nav>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- ***** Header Area End ***** -->
+<ng-container *ngIf="currentRoute=='home'">
+
+  <div class="main-banner wow fadeIn" id="top" data-wow-duration="1s" data-wow-delay="0.5s">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="row">
+            <div class="col-lg-6 align-self-center">
+              <div class="left-content show-up header-text wow fadeInLeft" data-wow-duration="1s" data-wow-delay="1s">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <h2>Trade smarter. Not Harder</h2>
+                    <h3 class="mb-5">Boost your profits by using Hybrid Technology</h3>
+                    <p style="font-weight: 500; font-size: 18px;">✅ 10+ years of experience</p>
+                    <p style="font-weight: 500; font-size: 18px;">✅ NSE & BSE Authorized Person</p>
+                    <p style="font-weight: 500; font-size: 18px;">✅ NISM Certified Trainer</p>
+                    <p style="font-weight: 500; font-size: 18px;">✅ 5000+ Users</p>
+
+                    <!-- <h6>Download our mobile apps for blazing fast experience</h6> -->
+                  </div>
+                  <!-- <div class="col-lg-12">
+                  <div class="white-button first-button scroll-to-section">
+                    <a href="#">App Store <i class="fab fa-apple"></i></a>
+                  </div>
+                  <div class="white-button scroll-to-section">
+                    <a href="#">Play Store <i class="fab fa-google-play"></i></a>
+                  </div>
+                </div> -->
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6">
+              <div class="right-image wow fadeInRight" data-wow-duration="1s" data-wow-delay="0.5s">
+                <img style="margin-left: 9rem;" src="assets/images/slider-dec.png" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div #servicesSection id="services" class="services section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+          <div class="section-heading  wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.5s">
+            <h4>Want to experience <em>Hybrid Technology</em> check out this interactive Traders Gurukul Center website
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3">
+          <div class="service-item first-service">
+            <div class="icon"></div>
+            <h4>Our Download Free Trading Engine. At your beck and call.</h4>
+            <p>Behind the scenes a powerful algo trading engine built on distributed architecture is connecting with
+              multiple data providers to fetch near real-time data of multiple exchanges around the world in Stocks,
+              Futures, Options, Currencies and Commodities so that you get the best possible automated trading
+              experience
+              in india.</p>
+            <div class="text-button">
+              <a href="#">Read More <i class="fa fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="service-item second-service">
+            <div class="icon"></div>
+            <h4>The magic of our strategy building wizard.</h4>
+            <p>Looking for a forex divergence? A simple buy and hold? A complex market making, maybe? Or maybe you have
+              no
+              idea what any of this means. No worries. We’ve got you covered.</p>
+            <div class="text-button">
+              <a href="#">Read More <i class="fa fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="service-item third-service">
+            <div class="icon"></div>
+            <h4>Social trading. A strategy marketplace.</h4>
+            <p>Complete market newbie? Not to worry. Social trading Makes it your participation in the best algo trading
+              strategies easy and most importantly transparent.</p>
+            <div class="text-button">
+              <a href="#">Read More <i class="fa fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <div class="service-item fourth-service">
+            <div class="icon"></div>
+            <h4>Our backtesting engine. Before going forward.</h4>
+            <p>Our backtesting engine will test your strategies in real-time with historical data before you go live.
+              This
+              includes testing for keywords ranging from holidays and corporate results to IVs and HVs. Your backtesting
+              results will offer you deep insights into how your strategy could perform going forward.</p>
+            <div class="text-button">
+              <a href="#">Read More <i class="fa fa-arrow-right"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div #aboutSection id="about" class="about-us section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-6 align-self-center">
+          <div class="section-heading">
+            <h4>About <em> Traders Gurukul Center</em> &amp; Our Mission</h4>
+            <img src="assets/images/heading-line-dec.png" alt="">
+            <p class="text-dark">At Traders Gurukul Center, we believe successful trading isn’t built on luck—it’s built
+              on discipline, research,
+              and innovation. Our journey to create this powerful algo system began with a single mission: to empower
+              traders with a tool that delivers consistency and confidence in the markets.
+            </p>
+            <p class="text-dark">This system is the result of years of hard work, countless hours of research, and
+              rigorous backtesting
+              across multiple market conditions. Every strategy, every parameter, and every signal has been fine-tuned
+              for
+              accuracy, reliability, and long-term performance.</p>
+
+            <p class="text-dark">What sets our algo apart isn’t just technology—it’s the dedication and passion behind
+              it. We built this
+              for people: traders who want to eliminate emotions, reduce guesswork, and trade with clarity.</p>
+
+            <p class="text-dark">Our promise is simple: a system designed by traders, for traders—backed by experience
+              and relentless
+              effort.</p>
+          </div>
+
+        </div>
+        <div class="col-lg-6">
+          <div class="right-image">
+            <img src="assets/images/about-right-dec.png" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div #servicesSection1 id="services1" class="services section">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+          <div class="section-heading  wow fadeInDown" data-wow-duration="1s" data-wow-delay="0.5s">
+            <h4>⚡ Services Provided by <em>Our Algo Software</em></h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row mb-2">
+        <div class="col-lg-4">
+          <div class="service-item first-service">
+            <div class="icon"></div>
+            <h4>Automated Trading Execution</h4>
+            <p>Executes trades instantly based on pre-set strategies—eliminating delays and emotional decisions.</p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="service-item second-service">
+            <div class="icon"></div>
+            <h4>Advanced Market Signals</h4>
+            <p>Real-time buy/sell signals with alerts across Equity, Options, Futures.
+            </p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="service-item third-service">
+            <div class="icon"></div>
+            <h4>Backtested Strategies</h4>
+            <p>Every strategy tested over years of historical data for consistency across market conditions.</p>
+
+          </div>
+        </div>
+      </div>
+      <div class="row mb-2">
+
+        <div class="col-lg-4">
+          <div class="service-item fourth-service">
+            <div class="icon"></div>
+            <h4>Risk Management Tools</h4>
+            <p>Automated stop-loss, targets, and position sizing to protect capital and reduce drawdowns. </p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="service-item first-service">
+            <div class="icon"></div>
+            <h4>Customizable Strategies
+            </h4>
+            <p>Tweak rules, timeframes, and instruments—adaptable for both beginners and pros. </p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="service-item second-service">
+            <div class="icon"></div>
+            <h4>Performance Tracking & Analytics
+            </h4>
+            <p>Reports on win rate, risk–reward, and profitability to continually improve your edge. </p>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-2">
+        <div class="col-lg-4">
+          <div class="service-item fourth-service">
+            <div class="icon"></div>
+            <h4>Seamless Integration
+            </h4>
+            <p>Connects with popular broker platforms & APIs. Easy setup with a beginner-friendly interface.
+
+            </p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="service-item first-service">
+            <div class="icon"></div>
+            <h4>Education & Support
+            </h4>
+            <p>Learning resources from Traders Gurukul Center and dedicated support for onboarding & troubleshooting.
+            </p>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="service-item fourth-service">
+            <div class="icon"></div>
+            <h4>Community Access (Optional)</h4>
+            <p>Join a network of traders, share insights, and collaborate on strategies and journeys.</p>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+  <div id="clients" class="the-clients">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 offset-lg-2">
+          <div class="section-heading">
+            <h4>Check What <em>Traders Say</em> About Us </h4>
+            <img src="assets/images/heading-line-dec.png" alt="">
+            <p>Real experiences from active traders</p>
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="naccs">
+            <div class="grid">
+              <div class="row">
+                <div class="col-lg-7 align-self-center">
+                  <div class="menu">
+                    <div class="first-thumb active">
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h4>Arun Nair</h4>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">Equity Futures</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+
+                            <span class="rating">4.8</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h4>Priya Subramanian</h4>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">Options Intraday</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+
+                            <span class="rating">4.5</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h4>Rahul Reddy</h4>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">Index Strategies</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+
+                            <span class="rating">4.7</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h4>Kavya Menon</h4>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">Swing & Positional</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+
+                            <span class="rating">4.9</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="last-thumb">
+                      <div class="thumb">
+                        <div class="row">
+                          <div class="col-lg-4 col-sm-4 col-12">
+                            <h4>Sanjay Kumar</h4>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 d-none d-sm-block">
+                            <span class="category">Commodities</span>
+                          </div>
+                          <div class="col-lg-4 col-sm-4 col-12">
+
+                            <span class="rating">4.3</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-5">
+                  <ul class="nacc">
+                    <li class="active">
+                      <div>
+                        <div class="thumb">
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="client-content">
+                                <img src="assets/images/quote.png" alt="">
+                                <p>“This algo made my trading stress-free and profitable. Highly recommend!”</p>
+                              </div>
+                              <div class="down-content d-flex align-items-center gap-3 mt-3">
+                                <div style="width: 60px; height: 60px; font-size: 1.25rem;"
+                                  class="d-flex align-items-center justify-content-center rounded-circle bg-primary text-white fw-bold">
+                                  AN</div>
+                                <div class="right-content">
+                                  <h4>Arun Nair</h4>
+                                  <span>Kochi • Full-time Trader</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div>
+                        <div class="thumb">
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="client-content">
+                                <img src="assets/images/quote.png" alt="">
+                                <p>“Finally, a system I can trust — consistent results, day after day.”</p>
+                              </div>
+                              <div class="down-content d-flex align-items-center gap-3 mt-3">
+                                <div style="width: 60px; height: 60px; font-size: 1.25rem;"
+                                  class="d-flex align-items-center justify-content-center rounded-circle bg-primary text-white fw-bold">
+                                  PS</div>
+                                <div class="right-content">
+                                  <h4>Priya Subramanian</h4>
+                                  <span>Chennai • Options Trader</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div>
+                        <div class="thumb">
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="client-content">
+                                <img src="assets/images/quote.png" alt="">
+                                <p>“Finally, a system I can trust — consistent results, day after day.”</p>
+                              </div>
+                              <div class="down-content d-flex align-items-center gap-3 mt-3">
+                                <div style="width: 60px; height: 60px; font-size: 1.25rem;"
+                                  class="d-flex align-items-center justify-content-center rounded-circle bg-primary text-white fw-bold">
+                                  RR</div>
+                                <div class="right-content">
+                                  <h4>Rahul Reddy</h4>
+                                  <span>Hyderabad • Index Trader</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div>
+                        <div class="thumb">
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="client-content">
+                                <img src="assets/images/quote.png" alt="">
+                                <p>“From confusion to confidence — this algo changed the way I trade.”</p>
+                              </div>
+                              <div class="down-content d-flex align-items-center gap-3 mt-3">
+                                <div style="width: 60px; height: 60px; font-size: 1.25rem;"
+                                  class="d-flex align-items-center justify-content-center rounded-circle bg-primary text-white fw-bold">
+                                  KM</div>
+                                <div class="right-content">
+                                  <h4>Kavya Menon</h4>
+                                  <span>Bengaluru • Swing Trader</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div>
+                        <div class="thumb">
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="client-content">
+                                <img src="assets/images/quote.png" alt="">
+                                <p>“Clean execution, clear alerts — the experience feels professional.”</p>
+                              </div>
+                              <div class="down-content d-flex align-items-center gap-3 mt-3">
+                                <div style="width: 60px; height: 60px; font-size: 1.25rem;"
+                                  class="d-flex align-items-center justify-content-center rounded-circle bg-primary text-white fw-bold">
+                                  SK</div>
+                                <div class="right-content">
+                                  <h4>Sanjay Kumar</h4>
+                                  <span>Coimbatore • Commodity Trader</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div id="pricing" class="pricing-tables">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 offset-lg-2">
+        <div class="section-heading">
+          <h4>We Have The Best Pre-Order <em>Prices</em> You Can Get</h4>
+          <img src="assets/images/heading-line-dec.png" alt="">
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eismod tempor incididunt ut labore et
+            dolore magna.</p>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="pricing-item-regular">
+          <span class="price">$12</span>
+          <h4>Standard Plan App</h4>
+          <div class="icon">
+            <img src="assets/images/pricing-table-01.png" alt="">
+          </div>
+          <ul>
+            <li>Lorem Ipsum Dolores</li>
+            <li>20 TB of Storage</li>
+            <li class="non-function">Life-time Support</li>
+            <li class="non-function">Premium Add-Ons</li>
+            <li class="non-function">Fastest Network</li>
+            <li class="non-function">More Options</li>
+          </ul>
+          <div class="border-button">
+            <a href="#">Purchase This Plan Now</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="pricing-item-pro">
+          <span class="price">$25</span>
+          <h4>Business Plan App</h4>
+          <div class="icon">
+            <img src="assets/images/pricing-table-01.png" alt="">
+          </div>
+          <ul>
+            <li>Lorem Ipsum Dolores</li>
+            <li>50 TB of Storage</li>
+            <li>Life-time Support</li>
+            <li>Premium Add-Ons</li>
+            <li class="non-function">Fastest Network</li>
+            <li class="non-function">More Options</li>
+          </ul>
+          <div class="border-button">
+            <a href="#">Purchase This Plan Now</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="pricing-item-regular">
+          <span class="price">$66</span>
+          <h4>Premium Plan App</h4>
+          <div class="icon">
+            <img src="assets/images/pricing-table-01.png" alt="">
+          </div>
+          <ul>
+            <li>Lorem Ipsum Dolores</li>
+            <li>120 TB of Storage</li>
+            <li>Life-time Support</li>
+            <li>Premium Add-Ons</li>
+            <li>Fastest Network</li>
+            <li>More Options</li>
+          </ul>
+          <div class="border-button">
+            <a href="#">Purchase This Plan Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+</ng-container>
+<ng-container *ngIf="currentRoute=='privacy-policy'">
+  <app-privacy-policy></app-privacy-policy>
+</ng-container>
+<ng-container *ngIf="currentRoute=='terms'">
+  <app-terms-and-condition></app-terms-and-condition>
+</ng-container>
+<footer id="newsletter">
+  <div class="container">
+
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="footer-widget">
+          <h4>Contact Us</h4>
+          <p style="font-weight: 400;">#48, Ushakiran, 30 feet service road, West RPC Layout, Bangalore - 560104</p>
+          <p style="font-weight: 400;"><a href="#">7676655843</a></p>
+          <p style="font-weight: 400;"><a>traders.gurukul.center@gmail.com</a></p>
+        </div>
+      </div>
+      <div class="col-lg-1"></div>
+      <div class="col-lg-4">
+        <div class="footer-widget">
+          <h4>Links</h4>
+          <ul>
+            <li><a (click)="currentRoute='home'">Home</a></li>
+            <li><a (click)="currentRoute='terms'">Terms & Conditions</a></li>
+            <li><a (click)="currentRoute='privacy-policy'">Privacy Policy</a></li>
+          </ul>
+
+        </div>
+      </div>
+      <div class="col-lg-1">
+        <div class="footer-widget">
+
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="footer-widget">
+          <h4>About Our Company</h4>
+          <div class="logo">
+            <img src="assets/images/white_logo.gif" style="width: 184px;height: 120px;">
+          </div>
+          <div class="social-links d-flex mt-3">
+
+            <a href="https://www.instagram.com/takeitheze?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+              target="_blank" class="instagram"><i class="bx bxl-instagram"></i></a>
+            <a href="https://www.youtube.com/@Takeitheze" target="_blank" class="youtube"><i
+                class="bx bxl-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <div class="copyright-text">
+          <p style="font-weight: 400;">Copyright © 2025 Traders Gurukul Center. All Rights Reserved.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,31 @@
+<div class="layout-topbar shadow-md flex items-center px-4 bg-surface-0 dark:bg-surface-900">
+  
+  <!-- Left: Logo -->
+  <div class="layout-topbar-logo-container flex items-center gap-3">
+   
+    <a class="layout-topbar-logo text-xl font-bold tracking-wide">
+      <img src="assets/images/white_logo.gif" alt="Logo" width="184" height="60" >
+    </a>
+  </div>
+
+  <!-- Middle: Horizontal Menu -->
+  <div class="flex-1 px-6">
+    <p-menubar style="color: white !important;" [model]="menuItems" class="custom-menubar w-full"></p-menubar>
+  </div>
+
+  <!-- Right: Actions -->
+  <div class="layout-topbar-actions flex items-center gap-3">
+    <!-- Dark mode toggle -->
+    <button type="button" class="layout-topbar-action p-button-rounded p-button-text" (click)="toggleDarkMode()">
+      <i [ngClass]="{ 'pi': true, 'pi-moon': layoutService.isDarkTheme(), 'pi-sun': !layoutService.isDarkTheme() }"
+        class="text-lg"></i>
+    </button>
+
+    <!-- Profile -->
+    <button pButton type="button" class="layout-topbar-action p-button-rounded p-button-text"
+      (click)="profileMenu.toggle($event)">
+      <i class="pi pi-user text-lg"></i>
+    </button>
+    <p-menu #profileMenu [popup]="true" [model]="profileItems"></p-menu>
+  </div>
+</div>

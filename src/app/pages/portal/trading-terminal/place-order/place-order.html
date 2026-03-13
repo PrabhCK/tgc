@@ -1,0 +1,102 @@
+<p-card class="max-w-4xl mx-auto !shadow-2xl !shadow-gray-800/50 p-6"
+  [ngClass]="type == 'buy'?'!border !border-2 !border-green-300':'!border !border-2 !border-red-200'">
+  <!-- Symbol Search + Buy/Sell -->
+  <div class="flex flex-wrap items-center gap-4 w-full mb-12">
+    <!-- Symbol Search -->
+    <div class="flex-1 min-w-[250px]">
+      <p-autoComplete [(ngModel)]="symbolsearch" [suggestions]="searchresult" (completeMethod)="search($event)"
+        (onSelect)="onStockSelect($event)" field="symbol" placeholder="Search For symbol"
+        class="w-full full-width-autocomplete">
+        <ng-template let-option pTemplate="item">
+          <div class="flex justify-between">
+            <span>{{ option.exchange }} | {{ option.symbol }}</span>
+          </div>
+        </ng-template>
+      </p-autoComplete>
+    </div>
+
+    <!-- Buy/Sell Radio -->
+    <div class="flex items-center gap-4">
+      <div class="flex items-center">
+        <p-radioButton name="type" value="buy" [(ngModel)]="type" inputId="buy"></p-radioButton>
+        <label for="buy" class="ml-2">Buy</label>
+      </div>
+
+      <div class="flex items-center">
+        <p-radioButton name="type" value="sell" [(ngModel)]="type" inputId="sell"></p-radioButton>
+        <label for="sell" class="ml-2">Sell</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Intraday / Delivery / Limit Radios -->
+  <div class="flex gap-14 mb-12">
+    <div class="flex gap-4">
+      <div>
+        <p-radioButton name="intradaytype" value="I" [(ngModel)]="intradayt" inputId="INTRADAY"></p-radioButton>
+        <label for="INTRADAY" class="ml-2">INTRADAY</label>
+      </div>
+      <div>
+        <p-radioButton name="intradaytype" value="D" [(ngModel)]="intradayt" inputId="DELIVERY"></p-radioButton>
+        <label for="DELIVERY" class="ml-2">DELIVERY</label>
+      </div>
+    </div>
+    <div class="flex gap-4">
+      <div>
+        <p-radioButton name="limittypes" value="LIMIT" [(ngModel)]="limittype" inputId="LIMIT"
+          (click)="handleChange(limittype)">
+        </p-radioButton>
+        <label for="LIMIT" class="ml-2">LIMIT</label>
+
+      </div>
+      <div>
+        <p-radioButton name="limittypes" value="MARKET" [(ngModel)]="limittype" inputId="MARKET"
+          (click)="handleChange(limittype)">
+        </p-radioButton>
+        <label for="MARKET" class="ml-2">MARKET</label>
+      </div>
+      <div>
+        <p-radioButton name="limittypes" value="SL" [(ngModel)]="limittype" [disabled]="regtype == 'CO'"
+          inputId="STOP_LOSS" (click)="handleChange(limittype)">
+        </p-radioButton>
+        <label for="STOP_LOSS" class="ml-2">STOP LOSS</label>
+      </div>
+
+    </div>
+    <div>
+
+    </div>
+    <!-- Add spacing before Limit/Market/SL -->
+
+
+  </div>
+
+  <!-- Qty / Price / Trigger Price -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+    <div>
+      <label class="block mb-1 font-medium">Qty</label>
+      <input type="number" pInputText [(ngModel)]="quantity" class="w-full border rounded px-2 py-1" />
+    </div>
+    <div>
+      <label class="block mb-1 font-medium">Price</label>
+      <input type="number" pInputText [(ngModel)]="price" [disabled]="limittype == 'MARKET'"
+        class="w-full border rounded px-2 py-1" />
+    </div>
+    <div>
+      <label class="block mb-1 font-medium">Trig. Price</label>
+      <input type="number" pInputText [(ngModel)]="trigerprice"
+        [disabled]="limittype == 'MARKET' || limittype == 'LIMIT'" class="w-full border rounded px-2 py-1" />
+    </div>
+  </div>
+
+
+  <!-- Action Buttons -->
+  <div class="text-right">
+    <button [disabled]="!userdata?.packagename" pButton [label]="type == 'buy'?'Buy':'Sell'"
+      [ngClass]="type == 'buy'?'!bg-green-600 !border-green ':'!bg-red-400 !border !border-red-400'"
+      class=" text-white px-6 py-2 rounded-lg shadow-lg" (click)="confirm()"></button>
+  </div>
+</p-card>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast />

@@ -1,0 +1,68 @@
+<!-- Form Card -->
+<div class="bg-dark dark:bg-light shadow-md rounded-lg p-4 mb-4">
+    <form #f="ngForm" class="space-y-4">
+        <div class="grid grid-cols-2 gap-4 items-end">
+            <!-- Date -->
+            <div>
+                <label for="selectedd" class="block mb-1 font-medium">Date</label>
+                <input type="date" id="selectedd" name="selectedd" [(ngModel)]="selected_date" #selectedd="ngModel"
+                    (change)="getEmaCrossOver();"
+                    class="p-inputtext w-full border border-gray-300 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    [ngClass]="{'border-red-500': !selected_date}" required />
+                <div *ngIf="selectedd.invalid && (selectedd.dirty || selectedd.touched)"
+                    class="text-red-500 text-sm mt-1">
+                    Date is required
+                </div>
+            </div>
+
+            <!-- Optional Add Button for Admin -->
+            <!--
+      <div *ngIf="userdata.role=='admin'" class="flex items-end">
+        <button pButton type="button" label="Add" class="p-button p-component p-button-primary"></button>
+      </div>
+      -->
+        </div>
+    </form>
+</div>
+
+<!-- Stock Intraday Card -->
+<div class="bg-dark dark:bg-light shadow-md rounded-lg mb-4">
+    
+    <div class="p-4 grid grid-cols-3 md:grid-cols-1 gap-4 ">
+        <!-- Volume Shockers Table -->
+        <div class="bg-light dark:bg-light shadow rounded-lg overflow-hidden border border-surface-300 dark:border-surface-700">
+            <div class="bg-blue-900 text-white text-center font-bold py-2">Breaks Out</div>
+            <div class="p-2">
+                <table *ngIf="emaCrossoverData.length > 0" class="min-w-full divide-y divide-gray-200 text-center">
+                    <thead class="bg-dark dark:bg-light ">
+                        <tr>
+                            <th class="px-2 py-1">S.no</th>
+                            <th class="px-2 py-1">Time</th>
+                            <th class="px-2 py-1">Script Name</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr *ngFor="let data of emaCrossoverData; let i = index">
+                            <td class="px-2 py-1">{{ i + 1 }}</td>
+                            <td class="px-2 py-1">{{ data.time }}</td>
+                            <td class="px-2 py-1">
+                                <button pButton type="button" class="px-2 py-1 rounded" [ngClass]="{
+                    'bg-red-500 hover:bg-red-600': data.trend == 'SELL',
+                    'bg-green-500 hover:bg-green-600': data.trend == 'BUY'
+                  }" (click)="openPlaceOrder(data)">
+                                    {{ data.stockname }}
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div *ngIf="emaCrossoverData.length === 0" class="text-center py-4">
+                    <p>No data available!!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add more tables like EMA Crossover, Range Breakout here -->
+    </div>
+</div>

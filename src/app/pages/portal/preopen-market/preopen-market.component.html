@@ -1,0 +1,185 @@
+<div class="p-4 space-y-6">
+  <!-- Main Card -->
+  <p-card>
+    <form #f="ngForm" (ngSubmit)="getStockData(); getIndicesData()" class="grid grid-cols-1 lg:grid-cols-4 gap-4">
+      <!-- Indices -->
+      <div>
+        <label class="block mb-1 font-medium">Indices</label>
+        <p-select [options]="stocks" [(ngModel)]="indices" name="indices" [ngClass]="{ 'p-invalid': !indices && f.submitted }"
+          (onChange)="getStockData(); getIndicesData()" placeholder="Select Index" class="w-full" />
+        <small class="text-red-500" *ngIf="!indices && f.submitted">Index is required</small>
+      </div>
+
+      <!-- Date -->
+      <div>
+        <label class="block mb-1 font-medium">Date</label>
+        <p-datepicker [(ngModel)]="selected_date" name="selected_date" dateFormat="dd-mm-yy" inputId="date"
+          [showIcon]="true" [ngClass]="{ 'p-invalid': !selected_date && f.submitted }" (onSelect)="datachange()"
+          class="w-full" />
+        <small class="text-red-500" *ngIf="!selected_date && f.submitted">Date is required</small>
+      </div>
+    </form>
+
+    <!-- Index Info -->
+    <div class="mt-6 space-y-2">
+      <div class="flex items-center gap-4">
+        <h5 class="font-bold text-lg">{{ tdata.indexname }}</h5>
+        <span class="px-2 py-1 border rounded text-green-600 font-bold">
+          Advances - {{ tdata.advances }}
+        </span>
+        <span class="px-2 py-1 border rounded text-red-600 font-bold">
+          Declines - {{ tdata.declines }}
+        </span>
+        <span class="px-2 py-1 border rounded text-yellow-600 font-bold">
+          Unchanged - {{ tdata.unchanged }}
+        </span>
+      </div>
+
+      <div *ngIf="indices !== 'FO'">
+        <div>
+          {{ tdata.todayopen | number : "1.2-2" }}
+          <p [ngClass]="
+              tdata.change > 0 ? 'text-green-600 font-semibold' : 'text-red-600 font-semibold'
+            ">
+            {{ tdata.change }} ({{ tdata.pchange }}%)
+            <i class="pi" [ngClass]="
+                tdata.change > 0 ? 'pi-arrow-up' : 'pi-arrow-down'
+              "></i>
+          </p>
+        </div>
+      </div>
+      <!-- <div style="height: 200px" echarts [options]="option" [merge]="updateOptions" class="demo-chart"></div> -->
+
+    </div>
+  </p-card>
+
+  <!-- Stock Tables -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Pre-open Bullish Stocks -->
+    <p-card header="Pre-open Bullish Stocks">
+      <p-table [value]="tdata.posstocks" [scrollable]="true" scrollHeight="400px" class="text-sm">
+        <ng-template pTemplate="header">
+          <tr>
+            <th
+              *ngFor="let col of ['Name','Today Open','Prev. Close','LTP %','LTP Chng','Qty','52W High','52W Low','Prev. Day Break','Note']">
+              {{ col }}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-data>
+          <tr>
+            <td>{{ data.symbol }}</td>
+            <td>{{ data.todayopen }}</td>
+            <td>{{ data.prevclose }}</td>
+            <td [ngClass]="data.pchange < 0 ? 'text-red-600' : 'text-green-600'">
+              {{ data.pchange }}%
+            </td>
+            <td [ngClass]="data.change < 0 ? 'text-red-600' : 'text-green-600'">
+              {{ data.change }}
+            </td>
+            <td>{{ data.qty }}</td>
+            <td>{{ data.p52whigh }}</td>
+            <td>{{ data.p52wlow | number }}</td>
+            <td>{{ data.prevdaybreak }}</td>
+            <td>{{ data.note }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+
+    <!-- Pre-open Bearish Stocks -->
+    <p-card header="Pre-open Bearish Stocks">
+      <p-table [value]="tdata.negstocks" [scrollable]="true" scrollHeight="400px" class="text-sm">
+        <ng-template pTemplate="header">
+          <tr>
+            <th
+              *ngFor="let col of ['Name','Today Open','Prev. Close','LTP %','LTP Chng','Qty','52W High','52W Low','Prev. Day Break','Note']">
+              {{ col }}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-data>
+          <tr>
+            <td>{{ data.symbol }}</td>
+            <td>{{ data.todayopen }}</td>
+            <td>{{ data.prevclose }}</td>
+            <td [ngClass]="data.pchange < 0 ? 'text-red-600' : 'text-green-600'">
+              {{ data.pchange }}%
+            </td>
+            <td [ngClass]="data.change < 0 ? 'text-red-600' : 'text-green-600'">
+              {{ data.change }}
+            </td>
+            <td>{{ data.qty }}</td>
+            <td>{{ data.p52whigh }}</td>
+            <td>{{ data.p52wlow | number }}</td>
+            <td>{{ data.prevdaybreak }}</td>
+            <td>{{ data.note }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+  </div>
+
+  <!-- Index Tables -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Pre-open Bullish Index -->
+    <p-card header="Pre-open Bullish Index">
+      <p-table [value]="indicedata.posstocks" [scrollable]="true" scrollHeight="400px" class="text-sm">
+        <ng-template pTemplate="header">
+          <tr>
+            <th
+              *ngFor="let col of ['Name','Today Open','Prev. Close','LTP %','LTP Chng','Qty','52W High','52W Low','Prev. Day Break','Note']">
+              {{ col }}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-data>
+          <tr>
+            <td>{{ data.symbol }}</td>
+            <td>{{ data.todayopen }}</td>
+            <td>{{ data.prevclose }}</td>
+            <td [ngClass]="data.pchange < 0 ? 'text-red-600' : 'text-green-600'">
+              {{ data.pchange }}%
+            </td>
+            <td [ngClass]="data.change < 0 ? 'text-red-600' : 'text-green-600'">
+              {{ data.change }}
+            </td>
+            <td>{{ data.qty }}</td>
+            <td>{{ data.p52whigh }}</td>
+            <td>{{ data.p52wlow | number }}</td>
+            <td>{{ data.prevdaybreak }}</td>
+            <td>{{ data.note }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+
+    <!-- Pre-open Bearish Index -->
+    <p-card header="Pre-open Bearish Index">
+      <p-table [value]="indicedata.negstocks" [scrollable]="true" scrollHeight="400px" class="text-sm">
+        <ng-template pTemplate="header">
+          <tr>
+            <th
+              *ngFor="let col of ['Name','Today Open','Prev. Close','LTP %','LTP Chng','Qty','52W High','52W Low','Prev. Day Break','Note']">
+              {{ col }}</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-data>
+          <tr>
+            <td>{{ data.symbol }}</td>
+            <td>{{ data.todayopen }}</td>
+            <td>{{ data.prevclose }}</td>
+            <td [ngClass]="data.pchange < 0 ? 'text-red-600' : 'text-green-600'">
+              {{ data.pchange }}%
+            </td>
+            <td [ngClass]="data.change < 0 ? 'text-red-600' : 'text-green-600'">
+              {{ data.change }}
+            </td>
+            <td>{{ data.qty }}</td>
+            <td>{{ data.p52whigh }}</td>
+            <td>{{ data.p52wlow | number }}</td>
+            <td>{{ data.prevdaybreak }}</td>
+            <td>{{ data.note }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-card>
+  </div>
+</div>

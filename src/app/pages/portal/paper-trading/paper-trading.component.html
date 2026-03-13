@@ -1,0 +1,89 @@
+<!-- Desktop Layout -->
+<div *ngIf="!isMobile" class="h-full grid grid-cols-12 gap-4">
+    <!-- Watchlist -->
+    <div class="col-span-3">
+        <app-watchlist></app-watchlist>
+    </div>
+
+    <!-- Main Content -->
+    <div class="col-span-9 space-y-4">
+        <!-- Margin Info -->
+        <p-card>
+            <ng-template pTemplate="content">
+                <div class="grid grid-cols-4 gap-4 items-center">
+                    <div>
+                        <div class="mb-1 font-semibold">Margin Total</div>
+                        <div>{{ marginData?.total | currency: 'INR' }}</div>
+                    </div>
+                    <div>
+                        <div class="mb-1 font-semibold">Margin Available</div>
+                        <div>{{ marginData?.available | currency: 'INR' }}</div>
+                    </div>
+                    <div>
+                        <div class="mb-1 font-semibold">Margin Used</div>
+                        <div>{{ marginData?.used | currency: 'INR' }}</div>
+                    </div>
+                    <div class="flex justify-end items-center">
+                        <p-button label="Reset Balance" severity="warn" (onClick)="resetBalance()"></p-button>
+                    </div>
+                </div>
+            </ng-template>
+        </p-card>
+
+        <!-- Tabs -->
+        <p-card class="h-full">
+            <ng-template pTemplate="content">
+                <div class="flex gap-2 my-3">
+                    <p-button label="Positions" severity="info" styleClass="p-button-rounded"
+                        (onClick)="tabchange('Positions')"></p-button>
+                    <p-button label="Orders" severity="help" styleClass="p-button-rounded"
+                        (onClick)="tabchange('Orders')"></p-button>
+                </div>
+
+                <app-positions *ngIf="tab === 'Positions'"></app-positions>
+                <app-orders *ngIf="tab === 'Orders'"></app-orders>
+            </ng-template>
+        </p-card>
+    </div>
+</div>
+
+<!-- Mobile Layout -->
+<div *ngIf="isMobile" class="space-y-4">
+    <p-card>
+        <ng-template pTemplate="content">
+            <div class="grid grid-cols-3 text-center">
+                <div>
+                    <div class="mb-1 font-semibold">Margin Total</div>
+                    <div>{{ marginData?.total | currency: 'INR' }}</div>
+                </div>
+                <div>
+                    <div class="mb-1 font-semibold">Margin Available</div>
+                    <div>{{ marginData?.available | currency: 'INR' }}</div>
+                </div>
+                <div>
+                    <div class="mb-1 font-semibold">Margin Used</div>
+                    <div>{{ marginData?.used | currency: 'INR' }}</div>
+                </div>
+            </div>
+        </ng-template>
+    </p-card>
+
+    <!-- Mobile Tabs -->
+    <div class="flex gap-2 my-3 justify-center">
+        <p-button label="Watchlist" severity="info" styleClass="p-button-rounded" size="small"
+            (onClick)="tabchange('Watchlist')"></p-button>
+        <p-button label="Positions" severity="help" styleClass="p-button-rounded" size="small"
+            (onClick)="tabchange('Positions')"></p-button>
+        <p-button label="Orders" severity="danger" styleClass="p-button-rounded" size="small"
+            (onClick)="tabchange('Orders')"></p-button>
+    </div>
+
+    <!-- Mobile Content -->
+    <div>
+        <app-watchlist *ngIf="tab === 'Watchlist'"></app-watchlist>
+        <app-positions *ngIf="tab === 'Positions'"></app-positions>
+        <app-orders *ngIf="tab === 'Orders'"></app-orders>
+    </div>
+</div>
+
+<p-toast />

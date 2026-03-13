@@ -1,0 +1,139 @@
+<p-card class="shadow-md rounded-lg">
+  <ng-template pTemplate="content">
+    <div class="flex flex-wrap items-center gap-4 mb-4">
+      <!-- Radio Button Group -->
+      <div class="flex items-center space-x-4 mx-3">
+        <p-selectbutton [(ngModel)]="statusopen" [options]="selectButtonValues" optionLabel="name" optionValue="value"
+          (onChange)="changeStatus($event)"></p-selectbutton>
+      </div>
+
+      <!-- Action Button -->
+      <div class="mx-3">
+        <p-button [disabled]="selectedRows.length==0" label="Sq. Pos. Mkt." icon="pi pi-bolt" severity="warn"
+          (click)="sqOff()" pTooltip="Square-off one or more positions at market rate!" tooltipPosition="bottom">
+        </p-button>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <p-table [value]="newposition" dataKey="id" emptyMessage="No records found" [responsiveLayout]="'scroll'"
+      [scrollable]="true" scrollHeight="400px" class="shadow-sm rounded-lg" [paginator]="true" 
+      [rowsPerPageOptions]="[10, 50,100]" [rows]="100">
+      <!-- Header -->
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="text-center">
+            <p-checkbox [disabled]="newposition.length==0" inputId="websitecheck" [binary]="true"
+              [ngModel]="isAllChecked()" (onChange)="checkUncheckAll($event)"></p-checkbox>
+          </th>
+          <th>SL</th>
+          <th>Symbol</th>
+          <th>Prod</th>
+          <th>Net Qty</th>
+          <th>LTP</th>
+          <th>Buy Avg Price</th>
+          <th>Sell Avg Price</th>
+          <th>M2M</th>
+          <th>P&L</th>
+        </tr>
+      </ng-template>
+
+      <!-- Body -->
+      <ng-template pTemplate="body" let-position>
+        <tr>
+          <td class="text-center">
+            <p-checkbox [binary]="true" [ngModel]="isRowChecked(position.id)"
+              (onChange)="rowCheckBoxChecked($event, position)"></p-checkbox>
+          </td>
+          <td>
+            <button pButton type="button" label="SL" class="p-button-info" (click)="sl(position)"></button>
+          </td>
+          <td>{{ position.symbol }}</td>
+          <td>{{ position.product_type }}</td>
+          <td class="text-right">{{ position.net_quantity }}</td>
+          <td class="text-right">{{ position.ltp | number: ".2-2" }}</td>
+          <td class="text-right">{{ position.buy_avg_price | number: ".2-2" }}</td>
+          <td class="text-right">{{ position.sell_avg_price | number: ".2-2" }}</td>
+          <td class="text-right font-bold" [ngClass]="{
+              'text-green-600': position.mtm > 0,
+              'text-red-600': position.mtm < 0
+            }">
+            {{ position.mtm | number: ".2-2" }}
+          </td>
+          <td class="text-right font-bold" [ngClass]="{
+              'text-green-600': position.pnl > 0,
+              'text-red-600': position.pnl < 0
+            }">
+            {{ position.pnl | number: ".2-2" }}
+          </td>
+        </tr>
+      </ng-template>
+
+      <!-- Footer -->
+      <ng-template pTemplate="footer">
+        <tr>
+          <td colspan="6" class="text-right font-semibold">Total:</td>
+          <td></td>
+          <td></td>
+          <td class="text-right font-bold" [ngClass]="{
+              'text-green-600': totalmtm > 0,
+              'text-red-600': totalmtm < 0
+            }">
+            {{ totalmtm | number: ".2-2" }}
+          </td>
+          <td class="text-right font-bold" [ngClass]="{
+              'text-green-600': totalpnl > 0,
+              'text-red-600': totalpnl < 0
+            }">
+            {{ totalpnl | number: ".2-2" }}
+          </td>
+          <td colspan="3"></td>
+        </tr>
+      </ng-template>
+      <ng-template #emptymessage>
+        <tr class="">
+          <td colspan="13" class="text-center !text-center text-gray-400">No data available</td>
+        </tr>
+      </ng-template>
+      
+    </p-table>
+  </ng-template>
+</p-card>
+<p-dialog header="Place Order" [(visible)]="displayDialog" [modal]="true" [closable]="true"
+  [style]="{ width: '500px' }">
+  <div class="p-4">
+    <!-- Symbol -->
+    <div class="mb-4">
+      <label class="block font-bold text-gray-700 mb-1">
+        Symbol: <span class="font-normal">{{ selectedPosition?.symbol }}</span>
+      </label>
+    </div>
+
+    <!-- Price and Trigger Price -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block font-bold text-gray-700 mb-1">Price</label>
+        <p-inputNumber [(ngModel)]="price" inputId="price" [showButtons]="true" mode="decimal"
+          class="w-full"></p-inputNumber>
+      </div>
+
+      <div>
+        <label class="block font-bold text-gray-700 mb-1">Trigger Price</label>
+        <p-inputNumber [(ngModel)]="trigerprice" inputId="trigerprice" [showButtons]="true" mode="decimal"
+          class="w-full"></p-inputNumber>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="text-center mt-6">
+      <p-button *ngIf="type === 'buy'" label="Buy" icon="pi pi-check"
+        styleClass="bg-green-600 border-green-600 hover:bg-green-700" (onClick)="confirmSl()"></p-button>
+
+      <p-button *ngIf="type === 'sell'" label="Sell" icon="pi pi-times"
+        styleClass="bg-red-600 border-red-600 hover:bg-red-700" (onClick)="confirmSl()"></p-button>
+    </div>
+  </div>
+</p-dialog>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast />

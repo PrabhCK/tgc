@@ -1,0 +1,66 @@
+<div
+    class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-screen overflow-hidden">
+    <div class="flex flex-col items-center justify-center">
+        <div
+            style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, #0EA5E9 10%, rgba(33, 150, 243, 0) 30%)">
+            <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20" style="border-radius: 53px">
+                <div class="text-center mb-8">
+                    <div  class="flex justify-center">
+                        <img src="assets/images/white_logo.gif" style="height: 120px;width: 184px; text-align: center;">
+
+                    </div>
+                    <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4"> Welcome to Traders Gurukul Center!
+
+                    </div>
+                    <span class="text-muted-color font-medium">Sign up</span>
+                </div>
+
+                <form [formGroup]="registerForm" (submit)="register()">
+                     <div>
+                        <label for="name"
+                            class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Name</label>
+                        <input pInputText id="name" type="text" placeholder="Name"
+                            class="w-full md:w-120 mb-8" formControlName="name" />
+                    </div>
+                     <div>
+                        <label for="phone"
+                            class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Phone</label>
+                        <input pInputText id="phone" type="text" placeholder="Phone"
+                            class="w-full md:w-120 mb-8" formControlName="phone" />
+                    </div>
+                    <div>
+                        <label for="username"
+                            class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Login ID (Email)</label>
+                        <input pInputText id="username" type="text" placeholder="Email address"
+                            class="w-full md:w-120 mb-8" formControlName="username" />
+                    </div>
+                    <div>
+                        <label for="password1"
+                            class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
+                        <p-password id="password1" formControlName="password" placeholder="Password" [toggleMask]="true"
+                            styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
+                    </div>
+                     <div>
+                        <label for="birthyear"
+                            class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Birth Year</label>
+                        <input pInputText id="birthyear" type="text" placeholder="Birth year"
+                            class="w-full md:w-120 mb-8" formControlName="birthyear" />
+                    </div>
+                     <!-- <div>
+                        <label for="institute_code"
+                            class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Institute Code</label>
+                        <input pInputText id="institute_code" type="text" placeholder="Institute Code"
+                            class="w-full md:w-120 mb-8" formControlName="institute_code" />
+                    </div> -->
+
+                    <p-button type="submit" label="Sign Up" styleClass="w-full"></p-button>
+                    <div class="flex justify-center mt-3 ">
+                        <p routerLink="/auth/login" class=" no-underline ml-2 text-right cursor-pointer text-primary">
+                            Already have an account? Sign In</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<p-toast></p-toast>

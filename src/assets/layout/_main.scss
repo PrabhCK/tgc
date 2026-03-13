@@ -1,0 +1,33 @@
+.layout-main-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: space-between;
+    padding: 6rem 2rem 0 2rem;
+    transition: margin-left var(--layout-section-transition-duration);
+}
+
+.layout-main {
+    flex: 1 1 auto;
+    padding-bottom: 2rem;
+}
+
+img {
+    max-width: none !important;
+}
+.custom-border {
+  border: 1px solid #673ab7 !important;
+  border-radius: 1.2rem !important;
+  box-shadow:
+    0 4px 8px 0 rgba(220, 220, 220, 0.2),
+    0 6px 20px 0 rgba(0, 0, 0, 0.19) !important;
+}
+.custom-header {
+  background-color: #822dd5 !important; // Purple color
+  color: white !important;
+  text-align: center !important;
+  border-radius: 8px !important;
+  width: fit-content !important;
+  padding: 4px 70px !important;
+  margin: -16px auto 0px auto !important; // Adjust positioning
+}

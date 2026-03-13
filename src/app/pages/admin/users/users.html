@@ -1,0 +1,207 @@
+<!-- Users List Card -->
+<p-card class="shadow-md rounded-2xl">
+  <ng-template pTemplate="header">
+    <div class="flex justify-between items-center ps-4 pt-4">
+      <h5 class="font-semibold text-lg text-gray-800">Users List</h5>
+      <div class="flex gap-2 me-5">
+        <button pButton label="Add" icon="pi pi-plus" class="p-button-primary" (click)="open()"></button>
+
+        <button pButton label="Export to Excel" icon="pi pi-file-excel" class="p-button-success"
+          (click)="exportToExcel()"></button>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="content">
+    <p-table #dt2 responsiveLayout="scroll" class="text-sm" [value]="userlist" [paginator]="true" [rows]="10"
+      [totalRecords]="totalRecords" [lazy]="true" [loading]="loading" (onLazyLoad)="getAllUsers($event)" dataKey="id"
+      [globalFilterFields]="['name', 'username', 'phone', 'packagename','account_name']" [showCurrentPageReport]="true"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
+      <ng-template pTemplate="caption" >
+        <div class="flex">
+          <p-iconField iconPosition="left" class="ml-auto">
+            <p-inputIcon>
+              <i class="pi pi-search"></i>
+            </p-inputIcon>
+            <input pInputText type="text" (input)="onGlobalSearch($event)"  placeholder="Search keyword" />
+          </p-iconField>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="text-center">SL</th>
+          <th class="text-center">Name</th>
+          <th class="text-center">User Name</th>
+          <th class="text-center">Mobile</th>
+          <th class="text-center">Package</th>
+          <th *ngIf="userdata.role === 'admin'" class="text-center">Account Name</th>
+          <th *ngIf="userdata.role === 'admin'" class="text-center">Login ID</th>
+          <!-- <th class="text-center">Institute Code</th> -->
+          <th class="text-center">Created Date</th>
+          <th class="text-center">Start Date</th>
+          <th class="text-center">End Date</th>
+          <th class="text-center">Last Login Date</th>
+          <!-- <th class="text-center">Comment</th> -->
+          <th *ngIf="userdata.role === 'admin'" class="text-center">Edit</th>
+          <th *ngIf="userdata.role === 'admin'" class="text-center">Delete</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-data let-i="rowIndex">
+        <tr>
+          <td class="text-center">{{ i + 1 }}</td>
+          <td class="text-center">{{ data.name }}</td>
+          <td class="text-center">{{ data.username }}</td>
+          <td class="text-center">{{ data.phone }}</td>
+          <td class="text-center">{{ data.packagename }}</td>
+          <td *ngIf="userdata.role === 'admin'" class="text-center">{{ data.account_name }}</td>
+          <td *ngIf="userdata.role === 'admin'" class="text-center">{{ data.loginid }}</td>
+          <!-- <td class="text-center">{{ data.institute_code || '-' }}</td> -->
+          <td class="text-center">{{ data.timecreated | date:'dd-MM-yyyy HH:mm':'UTC' }}</td>
+          <td class="text-center">{{ data.startdate | date:'dd-MM-yyyy' }}</td>
+          <td class="text-center">{{ data.enddate | date:'dd-MM-yyyy'}}</td>
+          <td class="text-center">{{ data.lastlogintime | date:'dd-MM-yyyy HH:mm':'UTC' }}</td>
+
+          <!-- Comment editing -->
+          <!-- <td *ngIf="userdata.role === 'institute'" class="text-center">
+            <div *ngIf="editingIndex !== i" class="flex items-center justify-center gap-2">
+              <i class="pi pi-pencil text-blue-500 cursor-pointer" (click)="editRow(i, data)"></i>
+              <span>{{ data.comment }}</span>
+            </div>
+            <div *ngIf="editingIndex === i" class="flex flex-col items-center gap-2">
+              <input type="text" pInputText [(ngModel)]="data.comment" placeholder="Comment"
+                class="w-full border rounded-md p-1" />
+              <button pButton label="Save" icon="pi pi-check" class="p-button-success p-button-sm"
+                (click)="editComment()"></button>
+            </div>
+          </td> -->
+
+          <!-- Admin edit/delete -->
+          <td *ngIf="userdata.role === 'admin'" class="text-center">
+            <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-info p-button-sm"
+              (click)="editUser(data)"></button>
+          </td>
+          <td *ngIf="userdata.role === 'admin'" class="text-center">
+            <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-sm"
+              (click)="confirmDelete(data)"></button>
+          </td>
+        </tr>
+      </ng-template>
+     
+    </p-table>
+  </ng-template>
+</p-card>
+
+<!-- Create User Dialog -->
+<p-dialog header="Create New User" [(visible)]="showCreateDialog" [modal]="true" [style]="{ width: '35rem',height:'fit-content' }"
+  [draggable]="false">
+  <form #f="ngForm" (ngSubmit)="createUser(f)" class="space-y-3">
+    <div class="flex flex-col space-y-1">
+      <label class="font-bold mb-3">Name</label>
+      <input pInputText type="text" name="name" [(ngModel)]="name" required />
+    </div>
+
+    <div class="flex flex-col space-y-1">
+      <label class="font-bold mb-3">Phone</label>
+      <input pInputText type="text" name="phone" [(ngModel)]="phone" required />
+    </div>
+
+    <div class="flex flex-col space-y-1">
+      <label class="font-bold mb-3">User Name (Email)</label>
+      <input pInputText type="email" name="username" [(ngModel)]="email" />
+    </div>
+
+    <div class="flex flex-col space-y-1">
+      <label class="font-bold mb-3">Password</label>
+      <input pInputText type="password" name="password" [(ngModel)]="password" />
+    </div>
+
+    <div class="flex flex-col space-y-1">
+      <label class="font-bold mb-3">Start Date</label>
+      <input type="date" pInputText name="startdate" [(ngModel)]="startdate" />
+    </div>
+    <div class="flex flex-col space-y-1">
+      <label class="font-bold mb-3">End Date</label>
+      <input type="date" pInputText name="enddate" [(ngModel)]="enddate" />
+    </div>
+    <div class="flex flex-col space-y-1">
+      <label class="font-bold mb-3">Select Package</label>
+      <p-select [options]="packagelist" optionLabel="name" optionValue="id" [(ngModel)]="packageid" name="packageid"
+        placeholder="Select Package" appendTo="body"></p-select>
+    </div>
+
+    <!-- <div>
+      <label class="font-bold mb-3">Institute Code</label>
+      <input pInputText type="text" name="institute_code" [(ngModel)]="institute_code" required />
+    </div> -->
+
+    <!-- <div>
+      <label class="font-bold mb-3">Comment</label>
+      <textarea pInputTextarea name="comment" [(ngModel)]="comment" rows="3" required></textarea>
+    </div> -->
+
+    <div class="text-center mt-4">
+      <button pButton label="Create" class="p-button-primary"></button>
+    </div>
+  </form>
+</p-dialog>
+
+<!-- Edit User Dialog -->
+<p-dialog header="Edit User" [(visible)]="showEditDialog" [modal]="true" [style]="{ width: '35rem' }"
+  [draggable]="false">
+  <form #f="ngForm" (ngSubmit)="updateUser(f)" class="space-y-3">
+    <div class="flex flex-col space-y-1">
+      <label class="font-bold mb-3">Name</label>
+      <input pInputText type="text" [(ngModel)]="editingdata.name" name="name" />
+    </div>
+
+    <div class="flex flex-col space-y-1">
+      <label class="font-bold mb-3">Phone</label>
+      <input pInputText type="text" [(ngModel)]="editingdata.phone" name="phone" />
+    </div>
+
+    <div class="flex flex-col space-y-1">
+      <label class="font-bold mb-3">User Name (Email)</label>
+      <input pInputText type="email" [(ngModel)]="editingdata.email" name="username" />
+    </div>
+
+    <div class="flex flex-col space-y-1">
+      <label class="font-bold mb-3">Password</label>
+      <input pInputText type="password" [(ngModel)]="editingdata.password" name="password" />
+    </div>
+
+    <div class="flex flex-col space-y-1">
+
+      <label class="font-bold mb-3">Start Date</label>
+      <input type="date" pInputText [(ngModel)]="editingdata.startdate" name="startdate" />
+    </div>
+    <div class="flex flex-col space-y-1">
+
+      <label class="font-bold mb-3">End Date</label>
+      <input type="date" pInputText [(ngModel)]="editingdata.enddate" name="enddate" />
+    </div>
+
+    <div class="flex flex-col space-y-1">
+      <label class="font-bold mb-3">Select Package</label>
+      <p-select [options]="packagelist" optionLabel="name" optionValue="id" [(ngModel)]="editingdata.packageid"
+        name="packageid" placeholder="Select Package" appendTo="body"></p-select>
+    </div>
+
+    <!-- <div class="flex flex-col space-y-1">
+      <label class="font-bold mb-3">Institute Code</label>
+      <input pInputText type="text" [(ngModel)]="editingdata.institute_code" name="institute_code" />
+    </div>
+
+    <div class="flex flex-col space-y-1">
+      <label class="font-bold mb-3">Comment</label>
+      <textarea pInputTextarea [(ngModel)]="editingdata.comment" name="comment" rows="3"></textarea>
+    </div> -->
+
+    <div class="text-center mt-4">
+      <button pButton label="Update User" class="p-button-primary"></button>
+    </div>
+  </form>
+</p-dialog>
+
+<p-toast />
+<p-confirmDialog></p-confirmDialog>

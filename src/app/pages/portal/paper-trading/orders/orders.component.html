@@ -1,0 +1,148 @@
+<p-card class="shadow-md rounded-lg">
+  <ng-template pTemplate="content">
+    <div class="flex flex-wrap items-center gap-4 mb-4">
+      <!-- Order Type Filter -->
+      <p-select [(ngModel)]="orderType" [options]="orderTypeOptions" optionValue="value" optionLabel="label"
+        (onChange)="onOrderType($event)" class="w-48"></p-select>
+
+      <!-- Action Buttons -->
+      <div class="flex gap-3">
+        <button [disabled]="selectedRows.length==0" pButton type="button" label="Cancel All" class="p-button-primary"
+          (click)="cancelAll()"></button>
+        <button [disabled]="selectedRows.length==0" pButton type="button"
+          [label]="'Cancel ' + selectedRows.length + ' Orders'" class="p-button-primary"
+          (click)="cancelSelected()"></button>
+      </div>
+    </div>
+
+    <p-table [value]="orderbook" dataKey="order_id" emptyMessage="No records found" [responsiveLayout]="'scroll'"
+      [scrollable]="true" size="large" scrollDirection="both" scrollHeight="400px" scrollWidth="400px"
+      class="shadow-sm rounded-lg text-sm">
+      <ng-template pTemplate="header">
+        <tr>
+          <th class="text-center">
+            <p-checkbox [disabled]="orderbook.length==0" inputId="websitecheck" [binary]="true" [ngModel]="isAllChecked()"
+              (onChange)="checkUncheckAll($event)"></p-checkbox>
+          </th>
+          <th>Edit</th>
+          <th>Symbol</th>
+          <th>Exch</th>
+          <th>Order Type</th>
+          <th>Status</th>
+          <th>Time</th>
+          <th>Qty</th>
+          <th>Price</th>
+          <th>Trig. Price</th>
+          <th>Order ID</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-order>
+        <tr>
+          <td class="text-center">
+            <p-checkbox [binary]="true" [ngModel]="isRowChecked(order.id)"
+              (onChange)="rowCheckBoxChecked($event, order)"></p-checkbox>
+          </td>
+          <td class="text-center">
+            <button pButton icon="pi pi-pencil" class="p-button-text p-button-rounded"
+              (click)="openModify(order)"></button>
+          </td>
+          <td class="whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]">{{ order.symbol }}</td>
+          <td>{{ order.exchange }}</td>
+
+          <!-- BUY / SELL color -->
+          <td class="whitespace-nowrap overflow-hidden text-ellipsis max-w-[200px]">
+            <!-- <span class="font-bold" [ngClass]="{
+              'text-green-600': order.transaction_type === 'BUY',
+              'text-red-600': order.transaction_type === 'SELL'
+            }">
+              {{ order.transaction_type || 'N/A' }} | {{ order.product_type }}
+            </span> -->
+            <p-tag value=" {{ order.transaction_type || 'N/A' }} | {{ order.product_type }}"
+              [severity]="getTtypeSeverity(order.transaction_type)"></p-tag>
+
+          </td>
+
+          <!-- Status with badge -->
+          <td>
+            <p-tag [value]="order.status" [severity]="getStatusSeverity(order.status)"></p-tag>
+          </td>
+
+          <td>{{ order.time }}</td>
+          <td>{{ order.traded_quantity || 0 }}/{{ order.quantity || 0 }}</td>
+          <td>{{ order.price }}</td>
+          <td>{{ order.trigger_price }}</td>
+          <td>{{ order.order_id }}</td>
+        </tr>
+
+      </ng-template>
+      <ng-template #emptymessage>
+        <tr class="">
+          <td colspan="11" class="text-center !text-center text-gray-400">No data available</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </ng-template>
+</p-card>
+
+<!-- Modify Order Dialog -->
+<p-dialog header="Modify Order" [(visible)]="modifyDialogVisible" [modal]="true" [closable]="true" [draggable]="false"
+  [resizable]="false" [style]="{ width: '600px' }">
+  <form #fr="ngForm" (ngSubmit)="editOrder(fr)" class="space-y-5">
+    <div class="grid grid-cols-12 gap-4">
+      <!-- Order ID -->
+      <div class="col-span-4">
+        <label class="block text-sm font-medium mb-1">Order ID</label>
+        <input pInputText type="text" name="orderid" [(ngModel)]="idtoedit.order_id" disabled class="w-full" />
+      </div>
+
+      <!-- Symbol -->
+      <div class="col-span-5">
+        <label class="block text-sm font-medium mb-1">Symbol</label>
+        <input pInputText type="text" name="symbol" [(ngModel)]="idtoedit.symbol" disabled class="w-full" />
+      </div>
+
+      <!-- Exchange -->
+      <div class="col-span-3">
+        <label class="block text-sm font-medium mb-1 font-bold">Exchange</label>
+        <input pInputText type="text" name="exchange" [(ngModel)]="idtoedit.exchange" disabled class="w-full" />
+      </div>
+
+      <!-- Order Type -->
+      <div class="col-span-3">
+        <label class="block text-sm font-medium mb-1">Order Type</label>
+        <p-select appendTo="body" [options]="orderTypes" [(ngModel)]="idtoedit.order_type" name="ordertype" optionLabel="label"
+          optionValue="value" placeholder="Select Type" class="w-full"></p-select>
+      </div>
+
+      <!-- Quantity -->
+      <div class="col-span-3">
+        <label class="block text-sm font-medium mb-1">Quantity</label>
+        <input pInputText type="number" name="quantity" [(ngModel)]="idtoedit.quantity" class="w-full" />
+      </div>
+
+      <!-- Price -->
+      <div class="col-span-3">
+        <label class="block text-sm font-medium mb-1">Price</label>
+        <input pInputText type="number" name="price" [(ngModel)]="idtoedit.price" class="w-full" />
+      </div>
+
+      <!-- Trigger Price -->
+      <div class="col-span-3">
+        <label class="block text-sm font-medium mb-1">Trigger Price</label>
+        <input pInputText type="number" name="triggerprice" [(ngModel)]="idtoedit.trigger_price" class="w-full" />
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="flex justify-end gap-3 pt-4">
+      <button pButton type="button" label="Cancel" class="p-button-outlined p-button-secondary"
+        (click)="modifyDialogVisible = false"></button>
+      <button pButton type="submit" label="Submit" class="p-button-danger"></button>
+    </div>
+  </form>
+</p-dialog>
+
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast />

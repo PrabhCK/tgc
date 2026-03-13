@@ -1,0 +1,137 @@
+.red-font {
+    color: #f5515f;
+}
+.green-font {
+    color: green;
+}
+
+.grey-bg-black-font {
+    background-color: #ede1ff;
+    color: #000;
+}
+.grey-bg-blue-font {
+    background-color: #ede1ff;
+    color: #0b5394;
+}
+
+.white-bg-blue-font {
+    background-color: var(--surface-color);
+    color: #0b5394;
+}
+
+.white-bg-green-font {
+    background-color: var(--surface-color);
+    border-radius: 10px;
+    color: green;
+}
+.white-bg-red-font {
+    background-color: var(--surface-color);
+    border-radius: 10px;
+    color: red;
+}
+
+.red-bg-black-font {
+    background-color: red;
+    border-radius: 10px;
+    color: #000;
+}
+
+.red-bg-white-font {
+    background-color: red;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.grey-bg-green-font {
+    background-color: #ede1ff;
+    color: green;
+}
+.grey-bg-red-font {
+    background-color: #ede1ff;
+    color: #f5515f;
+}
+
+.yellow-bg-red-font {
+    background-color: #ffeeba;
+    color: #f5515f;
+}
+
+.yellow-bg-green-font {
+    background-color: #ffeeba;
+    color: green;
+}
+.yellow-bg-black-font {
+    background-color: #ffeeba;
+    color: #000;
+}
+.yellow-bg-blue-font {
+    background-color: #ffeeba;
+    color: #0b5394;
+}
+
+.green-bg-white-font {
+    background-color: green;
+    border-radius: 10px;
+    color: #fff;
+}
+
+.green-bg-black-font {
+    background-color: green;
+    border-radius: 10px;
+    color: #000;
+}
+
+.longbuildup {
+    border: 4px solid green;
+    color: #fff;
+    padding: 2px;
+    border-radius: 5px;
+    background-color: green;
+}
+.longunwinding {
+    border: 4px solid #f47d7d;
+    color: white;
+    padding: 0px;
+    border-radius: 5px;
+    background-color: #f47d7d;
+
+}
+.shortbuildup {
+    border: 4px solid red;
+    color: white;
+    padding: 0px;
+    border-radius: 5px;
+    background-color: red;
+
+}
+.shortcovering {
+    border: 4px solid lightgreen;
+    color: rgb(0, 0, 0);
+    padding: 0px;
+    border-radius: 5px;
+    background-color: lightgreen;
+}
+
+.white-bg {
+    background-color: #fff;
+}
+.yellow-bg {
+    background-color: #ffeeba;
+}
+.grey-bg {
+    background-color: #ede1ff;
+}
+.red-bg {
+    background-color: #f5515f;
+}
+.green-bg {
+    background-color: #34a853;
+}
+
+
+::ng-deep .full-width-autocomplete,
+::ng-deep .full-width-autocomplete .p-autocomplete,
+::ng-deep .full-width-autocomplete .p-inputtext {
+  width: 100% !important;
+  display: block;
+}

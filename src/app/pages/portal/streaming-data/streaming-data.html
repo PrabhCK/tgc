@@ -1,0 +1,236 @@
+<div class="p-4 space-y-6">
+    <!-- Main Card -->
+    <p-card>
+        <form #f="ngForm" class="grid grid-cols-1 lg:grid-cols-6 gap-3">
+            <!-- Stock name -->
+            <div>
+                <label class="block mb-1 font-bold">Stock Name</label>
+                <p-select [options]="stocklist" [(ngModel)]="stockname" name="stockname"
+                    [ngClass]="{ 'p-invalid': !stockname && f.submitted }" (onChange)="stockchange($event)"
+                    placeholder="Select Stock" class="w-full" />
+                <small class="text-red-500" *ngIf="!stockname && f.submitted">Stock name is required</small>
+            </div>
+
+        </form>
+    </p-card>
+
+    <!-- Stock Tables -->
+    <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
+        <p-card>
+            <div class="overflow-x-auto">
+                <table class="min-w-full  text-sm text-center">
+                    <!-- Table Head -->
+                    <thead class="uppercase">
+                        <tr>
+                            <th class="px-2 py-2" colspan="6">CALL</th>
+                            <th class="px-2 py-2" colspan="1" rowspan="2">Strike<br>Price</th>
+                            <th class="px-2 py-2" colspan="6">PUT</th>
+                            <th class="px-2 py-2" colspan="1" rowspan="2">PCR<br>OI</th>
+                        </tr>
+                        <tr>
+                            <th class="px-2 py-2">OI<br>Int</th>
+                            <th class="px-2 py-2">OI</th>
+                            <th class="px-2 py-2">Vol</th>
+                            <th class="px-2 py-2">OI<br> Chg</th>
+                            <th class="px-2 py-2">LTP</th>
+                            <th class="px-2 py-2">BS</th>
+                            <th class="px-2 py-2">BS</th>
+                            <th class="px-2 py-2">LTP</th>
+                            <th class="px-2 py-2">OI<br> Chg</th>
+                            <th class="px-2 py-2">Vol</th>
+                            <th class="px-2 py-2">OI</th>
+                            <th class="px-2 py-2">OI<br>Int.</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let data of table_data">
+
+                            <td class="center" ngClass="{{ data.ce_oi_trend_css }}" *ngIf="data.ce_oi_int != 'NA'"
+                                title="{{data.ce_oi_int}}">
+                                <p [ngClass]="viewClassMap[data.ce_oi_int] || 'p-2 text-center'">{{
+                                    data.ce_oi_int === 'Short Buildup' ? 'SB' :
+                                    data.ce_oi_int === 'Long Buildup' ? 'LB' :
+                                    data.ce_oi_int === 'Short Covering' ? 'SC' :
+                                    data.ce_oi_int === 'Long Unwinding' ? 'LU' : '-'
+                                    }}</p>
+                            </td>
+                            <td class="center" ngClass="{{ data.ce_oi_int_css }}" *ngIf="data.ce_oi_int == 'NA'">
+                                {{ data.ce_oi_int }}
+                            </td>
+                            <td class="center" ngClass="{{ data.ce_oi_css }}">
+                                {{ data.ce_oi | prefix }}
+                            </td>
+                            <td class="center" ngClass="{{ data.ce_vol_css }}">
+                                {{ data.ce_vol | number:'1.2-2' }}
+                            </td>
+
+                            <td class="center" ngClass="{{ data.ce_oi_chg_css }}">
+                                {{ data.ce_oi_chg | prefix }}
+                            </td>
+                            <td class="center" ngClass="{{ data.ce_ltp_css }}">
+                                {{ data.ce_ltp | number:'1.2-2' }}
+                            </td>
+                            <td ngClass="{{ data.ce_ltp_css }}">
+                                <p-button class="me-1 py-1" label="B" severity="success"
+                                    (click)="openPlaceOrder(data,'CE','buy')" />
+                                <p-button label="S" severity="danger" (click)="openPlaceOrder(data,'CE','sell')" />
+                            </td>
+                            <td class="center yellow-bg dark:text-gray-900">
+                                <strong>{{ data.strike_price | number }}</strong>
+                            </td>
+                            <td class="center" ngClass="{{ data.pe_ltp_css }}">
+                                <p-button class="me-1 py-1" label="B" severity="success"
+                                    (click)="openPlaceOrder(data,'PE','buy')" />
+                                <p-button label="S" severity="danger" (click)="openPlaceOrder(data,'PE','sell')" />
+                            </td>
+                            <td class="center" ngClass="{{ data.pe_ltp_css }}">
+                                {{ data.pe_ltp | number:'1.2-2'}}
+                            </td>
+                            <td class="center" ngClass="{{ data.pe_oi_chg_css }}">
+                                {{ data.pe_oi_chg | prefix }}
+                            </td>
+                            <td class="center" ngClass="{{ data.pe_vol_css }}">
+                                {{ data.pe_vol | prefix }}
+                            </td>
+                            <td class="center" ngClass="{{ data.pe_oi_css }}">
+                                {{ data.pe_oi | prefix }}
+                            </td>
+                            <td class="center" ngClass="{{ data.pe_oi_trend_css }}" *ngIf="data.pe_oi_int != 'NA'">
+                                <p [ngClass]="viewClassMap[data.pe_oi_int] || 'p-2 text-center'">{{
+                                    data.pe_oi_int === 'Short Buildup' ? 'SB' :
+                                    data.pe_oi_int === 'Long Buildup' ? 'LB' :
+                                    data.pe_oi_int === 'Short Covering' ? 'SC' :
+                                    data.pe_oi_int === 'Long Unwinding' ? 'LU' : '-'
+                                    }}</p>
+                            </td>
+                            <td class="px-2 py-1" ngClass="{{ data.pe_oi_int_css }}" *ngIf="data.pe_oi_int == 'NA'">
+                                {{ data.pe_oi_int }}
+                            </td>
+
+
+                            <td class="center pe-2" ngClass="{{ data.pcr_oi_css }}">
+                                <strong>{{ data.pcr_oi | number }}</strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold py-4 center">Total</td>
+                            <td class="font-bold py-4 center">{{totalData?.total_ce_oi | prefix}}</td>
+                            <td class="font-bold py-4 center">{{totalData?.total_ce_vol | prefix }}</td>
+                            <td class="font-bold py-4 center">{{totalData?.total_ce_oi_chg | prefix}}</td>
+                            <td class="font-bold py-4 center">{{totalData?.total_ce_ltp | prefix}}</td>
+                            <td class="font-bold py-4 center">-</td>
+                            <td class="font-bold py-4 center">-</td>
+                            <td class="font-bold py-4 center">-</td>
+                            <td class="font-bold py-4 center">{{totalData?.total_pe_ltp | prefix}}</td>
+                            <td class="font-bold py-4 center">{{totalData?.total_pe_oi_chg | prefix}}</td>
+                            <td class="font-bold py-4 center">{{totalData?.total_pe_vol| prefix}}</td>
+                            <td class="font-bold py-4 center">{{totalData?.total_pe_oi | prefix}}</td>
+                            <td class="font-bold py-4 center">-</td>
+                            <td class="font-bold py-4 center">{{totalData?.total_pcr_oi | prefix}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </p-card>
+    </div>
+    <p-dialog [(visible)]="displayDialog" [modal]="true" [closable]="true" [style]="{ width: '614px' }">
+    <!-- Symbol Search + Buy/Sell -->
+  <div class="flex flex-wrap items-center gap-4 w-full mb-12">
+    <!-- Symbol Search -->
+    <div class="flex-1 min-w-[250px]">
+      <p-autoComplete [(ngModel)]="symbolsearch" [suggestions]="searchresult" (completeMethod)="search($event)"
+        (onSelect)="onStockSelect($event)" field="symbol" placeholder="Search For symbol"
+        class="w-full full-width-autocomplete">
+        <ng-template let-option pTemplate="item">
+          <div class="flex justify-between">
+            <span>{{ option.exchange }} | {{ option.symbol }}</span>
+          </div>
+        </ng-template>
+      </p-autoComplete>
+    </div>
+
+    <!-- Buy/Sell Radio -->
+    <div class="flex items-center gap-4">
+      <div class="flex items-center">
+        <p-radioButton name="type" value="buy" [(ngModel)]="type" inputId="buy"></p-radioButton>
+        <label for="buy" class="ml-2">Buy</label>
+      </div>
+
+      <div class="flex items-center">
+        <p-radioButton name="type" value="sell" [(ngModel)]="type" inputId="sell"></p-radioButton>
+        <label for="sell" class="ml-2">Sell</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Intraday / Delivery / Limit Radios -->
+  <div class="flex gap-14 mb-12">
+    <div class="flex gap-4">
+      <div>
+        <p-radioButton name="intradaytype" value="I" [(ngModel)]="intradayt" inputId="INTRADAY"></p-radioButton>
+        <label for="INTRADAY" class="ml-2">INTRADAY</label>
+      </div>
+      <div>
+        <p-radioButton name="intradaytype" value="D" [(ngModel)]="intradayt" inputId="DELIVERY"></p-radioButton>
+        <label for="DELIVERY" class="ml-2">DELIVERY</label>
+      </div>
+    </div>
+    <div class="flex gap-4">
+      <div>
+        <p-radioButton name="limittypes" value="LIMIT" [(ngModel)]="limittype" inputId="LIMIT"
+          (click)="handleChange(limittype)">
+        </p-radioButton>
+        <label for="LIMIT" class="ml-2">LIMIT</label>
+
+      </div>
+      <div>
+        <p-radioButton name="limittypes" value="MARKET" [(ngModel)]="limittype" inputId="MARKET"
+          (click)="handleChange(limittype)">
+        </p-radioButton>
+        <label for="MARKET" class="ml-2">MARKET</label>
+      </div>
+      <div>
+        <p-radioButton name="limittypes" value="SL" [(ngModel)]="limittype" [disabled]="regtype == 'CO'"
+          inputId="STOP_LOSS" (click)="handleChange(limittype)">
+        </p-radioButton>
+        <label for="STOP_LOSS" class="ml-2">STOP LOSS</label>
+      </div>
+
+    </div>
+    <div>
+
+    </div>
+    <!-- Add spacing before Limit/Market/SL -->
+
+
+  </div>
+
+  <!-- Qty / Price / Trigger Price -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+    <div>
+      <label class="block mb-1 font-medium">Qty</label>
+      <input type="number" pInputText [(ngModel)]="quantity" class="w-full border rounded px-2 py-1" />
+    </div>
+    <div>
+      <label class="block mb-1 font-medium">Price</label>
+      <input type="number" pInputText [(ngModel)]="price" [disabled]="limittype == 'MARKET'"
+        class="w-full border rounded px-2 py-1" />
+    </div>
+    <div>
+      <label class="block mb-1 font-medium">Trig. Price</label>
+      <input type="number" pInputText [(ngModel)]="trigerprice"
+        [disabled]="limittype == 'MARKET' || limittype == 'LIMIT'" class="w-full border rounded px-2 py-1" />
+    </div>
+  </div>
+
+
+  <!-- Action Buttons -->
+  <div class="text-right">
+    <button pButton [label]="type == 'buy'?'Buy':'Sell'"
+      [ngClass]="type == 'buy'?'!bg-green-600 !border-green ':'!bg-red-400 !border !border-red-400'"
+      class=" text-white px-6 py-2 rounded-lg shadow-lg" (click)="confirm()"></button>
+  </div>
+</p-dialog>
+<p-confirmDialog></p-confirmDialog>
+<p-toast />

@@ -1,0 +1,171 @@
+<div class="p-4 space-y-6">
+    <!-- Main Card -->
+    <p-card>
+        <form #f="ngForm" (ngSubmit)="oianalysis()" class="grid grid-cols-1 lg:grid-cols-6 gap-3">
+            <!-- Stock name -->
+            <div>
+                <label class="block mb-1 font-medium font-bold">Stock Name</label>
+                <p-select [options]="stocklist" [(ngModel)]="stockname" name="stockname"
+                    [ngClass]="{ 'p-invalid': !stockname && f.submitted }" (onChange)="getDate()"
+                    placeholder="Select Stock" class="w-full" />
+                <small class="text-red-500" *ngIf="!stockname && f.submitted">Stock name is required</small>
+            </div>
+            <div>
+                <label class="block mb-1 font-medium">Date</label>
+                <p-datepicker [(ngModel)]="selected_date" name="selected_date" dateFormat="yy-mm-dd" inputId="date"
+                    [showIcon]="true" [ngClass]="{ 'p-invalid': !selected_date && f.submitted }"
+                    (onSelect)="getExpiryDates()" class="w-full" />
+                <small class="text-red-500" *ngIf="!selected_date && f.submitted">Date is required</small>
+            </div>
+            <div>
+                <label class="block mb-1 font-medium">Expiry Date</label>
+                <p-select [options]="expirydates" [(ngModel)]="expiry_selected_date" name="expiry_selected_date"
+                    [ngClass]="{ 'p-invalid': !expiry_selected_date && f.submitted }" (onChange)="getStrikePrice()"
+                    placeholder="Select Index" class="w-full" />
+                <small class="text-red-500" *ngIf="!expiry_selected_date && f.submitted">Expiry Date is required</small>
+            </div>
+            <div>
+                <label class="block mb-1 font-medium">Strike Price</label>
+                <p-select [options]="strikeprices" [(ngModel)]="strikeprice" name="strikeprice"
+                    [ngClass]="{ 'p-invalid': !strikeprice && f.submitted }" (onChange)="oianalysis()"
+                    placeholder="Select Strike Price" class="w-full" />
+                <small class="text-red-500" *ngIf="!strikeprice && f.submitted">Strike price is required</small>
+            </div>
+            <div>
+                <label class="block mb-1 font-medium">Timeframe</label>
+                <p-select [options]="timeframes" [(ngModel)]="timeframe" name="timeframe"
+                    [ngClass]="{ 'p-invalid': !timeframe && f.submitted }" (onChange)="getDate()"
+                    placeholder="Select timeframe" class="w-full" />
+                <small class="text-red-500" *ngIf="!selected_date && f.submitted">Timeframe is required</small>
+            </div>
+        </form>
+        <p class="pt-5">
+            Underlying: <b>{{ stockname }} </b>at
+            <strong>{{ tdata.spot_ltp | number }}</strong>, Chg:
+            <span [ngClass]="{
+            'text-red-500': tdata.spot_change < 0,
+            'text-green-500': tdata.spot_change > 0
+          }">
+                <strong>{{ tdata.spot_change | number }} </strong></span>
+            <span [ngClass]="{
+             'text-red-500': tdata.spot_change_per < 0,
+            'text-green-500': tdata.spot_change_per > 0
+          }">
+                <strong>({{ tdata.spot_change_per }} % )</strong>
+            </span>
+        </p>
+
+    </p-card>
+
+    <!-- Stock Tables -->
+    <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
+        <p-card>
+            <div class="overflow-x-auto">
+                <table class="min-w-full border border-gray-200 text-sm text-center">
+                    <!-- Table Head -->
+                    <thead class="bg-gray-100 uppercase text-gray-700">
+                        <tr>
+                            <th rowspan="2" class=" px-2 py-2">Time</th>
+                            <th colspan="4" class=" px-2 py-2">CALL</th>
+                            <th colspan="2" class=" px-2 py-2">
+                                <button class="bg-green-600 text-white px-2 py-1 rounded mr-1"
+                                    (click)="openPlaceOrder(table_data[0],'CE','buy')">BUY</button>
+                                <button class="bg-red-600 text-white  px-2 py-1 rounded"
+                                    (click)="openPlaceOrder(table_data[0],'CE','sell')">SELL</button>
+                            </th>
+                            <th rowspan="2" class="px-2 py-2">Strike<br>Price</th>
+                            <th colspan="2" class="px-2 py-2">
+                                <button class="bg-green-600 text-white px-2 py-1 rounded mr-1"
+                                    (click)="openPlaceOrder(table_data[0],'PE','buy')">BUY</button>
+                                <button class="bg-red-600 text-white px-2 py-1 rounded"
+                                    (click)="openPlaceOrder(table_data[0],'PE','sell')">SELL</button>
+                            </th>
+                            <th colspan="4" class=" px-2 py-2">PUT</th>
+                            <th rowspan="2" class=" px-2 py-2">PCR<br>OI</th>
+                        </tr>
+
+                        <tr class="bg-gray-50">
+                            <th class="px-2 py-1">OI</th>
+                            <th class="px-2 py-1">LTP</th>
+                            <th class="px-2 py-1">LTP Chng</th>
+                            <th class="px-2 py-1">OI Chng</th>
+                            <th class="px-2 py-1">OI Int</th>
+                            <th class="px-2 py-1">Trend</th>
+                            <th class="px-2 py-1">Trend</th>
+                            <th class="px-2 py-1">OI Int</th>
+                            <th class="px-2 py-1">OI Chng</th>
+                            <th class="px-2 py-1">LTP Chng</th>
+                            <th class="px-2 py-1">LTP</th>
+                            <th class="px-2 py-1">OI</th>
+                        </tr>
+                    </thead>
+
+                    <!-- Table Body -->
+                    <tbody>
+                        <tr *ngFor="let data of table_data" class="hover:bg-gray-50">
+                            <td class="px-2 py-1 font-bold">{{ data.time }}</td>
+
+                            <!-- CALL -->
+                            <td class="px-2 py-1">{{ data.ce_oi | prefix }}</td>
+                            <td class="px-2 py-1">{{ data.ce_ltp | number:'1.2-2' }}</td>
+                            <td class="px-2 py-1"
+                                [ngClass]="{'text-red-500': data.ce_ltp_chg<0, 'text-green-500': data.ce_ltp_chg>0}">
+                                {{ data.ce_ltp_chg | number:'1.2-2' }}
+                            </td>
+                            <td class="px-2 py-1"
+                                [ngClass]="{'text-red-500': data.ce_oi_chg<0, 'text-green-500': data.ce_oi_chg>0}">
+                                {{ data.ce_oi_chg | prefix }}
+                            </td>
+                            <td class="px-2 py-1">
+                                 <p [ngClass]="viewClassMap[data.ce_oi_int] || 'p-2 text-center'">
+                                    {{ data.ce_oi_int }}
+                                </p>
+                            </td>
+                            <td class="px-2 py-1">
+                                <img *ngIf="data.ce_trend == 'Bearish'" class="inline w-5 h-5"
+                                    src="assets/icons/red-arrow-down-11380.svg" />
+                                <img *ngIf="data.ce_trend == 'Bullish'" class="inline w-5 h-5"
+                                    src="assets/icons/green-arrow-up-11385.svg" />
+                            </td>
+
+                            <!-- Strike -->
+                            <td class=" px-2 py-1 font-bold">{{ data.strikeprice }}</td>
+
+                            <!-- PUT -->
+                            <td class=" px-2 py-1">
+                                <img *ngIf="data.pe_trend == 'Bearish'" class="inline w-5 h-5"
+                                    src="assets/icons/red-arrow-down-11380.svg" />
+                                <img *ngIf="data.pe_trend == 'Bullish'" class="inline w-5 h-5"
+                                    src="assets/icons/green-arrow-up-11385.svg" />
+                            </td>
+                            <td class=" px-2 py-1">
+                                <p [ngClass]="viewClassMap[data.pe_oi_int] || 'p-2 text-center'">
+                                    {{ data.pe_oi_int }}
+                                </p>
+                            </td>
+                            <td class=" px-2 py-1"
+                                [ngClass]="{'text-red-500': data.pe_oi_chg<0, 'text-green-500': data.pe_oi_chg>0}">
+                                {{ data.pe_oi_chg | prefix }}
+                            </td>
+                            <td class=" py-1"
+                                [ngClass]="{'text-red-500': data.pe_ltp_chg<0, 'text-green-500': data.pe_ltp_chg>0}">
+                                {{ data.pe_ltp_chg | number:'1.2-2' }}
+                            </td>
+                            <td class=" py-1">{{ data.pe_ltp | number:'1.2-2' }}</td>
+                            <td class=" py-1">{{ data.pe_oi | prefix }}</td>
+
+                            <!-- PCR OI -->
+                            <td class=" py-1">
+                                <strong [ngClass]="
+                    data.pcr_oi > 1 ? 'text-green-500' : 
+                    data.pcr_oi < 1 ? 'text-red-500' : 'text-yellow-500'">
+                                    {{ data.pcr_oi | number:'1.2-2' }}
+                                </strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </p-card>
+    </div>

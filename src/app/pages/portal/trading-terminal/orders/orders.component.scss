@@ -1,0 +1,51 @@
+input[type="radio"],
+input[type="checkbox"] {
+  box-sizing: border-box;
+  padding: 0;
+  height: 20px !important;
+  width: 20px !important;
+}
+.complete {
+  color: #224323c4 !important;
+  background: #00800038;
+  border-radius: 5px;
+  padding: 10px;
+}
+.cancel {
+  background: #cdcdc3;
+  padding: 10px;
+  border-radius: 5px;
+  color: #1d1d1d;
+}
+.open {
+  color: black !important;
+  background: #ffffaa;
+  border-radius: 5px;
+  padding: 10px;
+}
+.reject {
+  color: #ff3d71 !important;
+  background: antiquewhite;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.sell_trans {
+  border: 2px solid red;
+  background-color: red;
+  color: #fff;
+  padding: 3px;
+  font-size: 13px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.buy_trans {
+  border: 2px solid green;
+  background-color: green;
+  padding: 3px;
+  font-size: 13px;
+  color: #fff;
+  border-radius: 10px;
+  text-align: center;
+}

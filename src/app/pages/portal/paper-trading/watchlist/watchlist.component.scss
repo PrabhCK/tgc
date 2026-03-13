@@ -1,0 +1,85 @@
+.stock-item {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  font-size: 12px !important;
+  .stock-left {
+    display: flex;
+    flex-direction: column;
+    .stock-title {
+      font-weight: bold;
+      color: green;
+    }
+    .stock-subtitle {
+      font-size: 0.75rem;
+      color: #aaa;
+    }
+  }
+
+  .stock-actions {
+    display: none;
+  }
+
+  .stock-right {
+    text-align: right;
+    margin-left: 5px;
+  }
+}
+.stock-item:hover .stock-actions {
+  opacity: 1;
+  position: absolute;
+  pointer-events: all;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  top: 54%;
+  right: 32%;
+}
+
+.stock-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+
+  input {
+    width: 100%;
+  }
+
+  .stock-count {
+    font-size: 12px;
+    color: #ccc;
+  }
+}
+.autocomplete-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.add-icon {
+  cursor: pointer;
+  color: var(--text-basic-color);
+}
+
+th {
+  font-size: 12px !important;
+}
+
+td {
+  font-size: 12px !important;
+}
+:host ::ng-deep .p-button.p-button-sm {
+  font-size: 11px !important;
+  padding: 2px 6px !important;
+}
+:host ::ng-deep .p-autocomplete {
+  width: 100% !important;
+}
+
+:host ::ng-deep .p-autocomplete-input {
+  width: 100% !important;
+ 
+}

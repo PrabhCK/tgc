@@ -1,0 +1,240 @@
+<!-- Packages List Card -->
+<p-card class="shadow-md rounded-2xl">
+    <ng-template pTemplate="header">
+        <div class="flex justify-between items-center ps-4 pt-4">
+            <h5 class="font-semibold text-lg text-gray-800">Packages List</h5>
+            <div class="flex gap-2 me-5">
+                <button pButton label="Add" icon="pi pi-plus" class="p-button-primary" (click)="open()"></button>
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="content">
+        <p-table responsiveLayout="scroll" class="text-sm" [value]="packagelist" [paginator]="true" [rows]="10"
+            [totalRecords]="totalRecords" dataKey="id">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="text-center">SL</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Discounted Price</th>
+                    <th>Period</th>
+                    <th>Status</th>
+                    <th class="text-center">Edit</th>
+                    <th class="text-center">Delete</th>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="body" let-data let-i="rowIndex">
+                <tr>
+                    <td class="text-center">{{ i + 1 }}</td>
+                    <td class="text-center">{{ data.name }}</td>
+                    <td class="text-center">{{ data.price }}</td>
+                    <td class="text-center">{{ data.discountedprice }}</td>
+                    <td class="text-center">{{ data.period }}</td>
+                    <td class="text-center">{{ data.status }}</td>
+
+                    <td class="text-center">
+                        <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-info p-button-sm"
+                            (click)="editPackage(data)"></button>
+                    </td>
+                    <td class="text-center">
+                        <button pButton icon="pi pi-trash" class="p-button-rounded p-button-danger p-button-sm"
+                            (click)="confirmDelete(data)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </ng-template>
+</p-card>
+
+<!-- Create Package Dialog -->
+<p-dialog header="Create New Package" [(visible)]="showCreateDialog" [modal]="true" [style]="{ width: '35rem' }"
+    [draggable]="false">
+    <form #f="ngForm" (ngSubmit)="createPackage(f)" class="space-y-3">
+
+            <div class="flex flex-col gap-4">
+
+                <!-- Name -->
+                <div>
+                    <label class="font-semibold mb-1 block">Name</label>
+                    <input pInputText name="name" [(ngModel)]="name" required class="w-full" />
+                </div>
+
+                <!-- Price -->
+                <div>
+                    <label class="font-semibold mb-1 block">Price</label>
+                    <p-inputNumber [(ngModel)]="price" name="price" mode="decimal" class="w-full" required>
+                    </p-inputNumber>
+                </div>
+
+                <!-- Discount -->
+                <div>
+                    <label class="font-semibold block mb-2">Discount</label>
+
+                    <div class="flex gap-6">
+                        <div class="flex items-center gap-2">
+                            <p-radioButton name="isdiscount" [value]="true" [(ngModel)]="isdiscount">
+                            </p-radioButton>
+                            <label>Yes</label>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <p-radioButton name="isdiscount" [value]="false" [(ngModel)]="isdiscount">
+                            </p-radioButton>
+                            <label>No</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Discounted Price -->
+                <div *ngIf="isdiscount">
+                    <label class="font-semibold mb-1 block">Discounted Price</label>
+                    <p-inputNumber [(ngModel)]="discountedprice" name="discountedprice" class="w-full" required>
+                    </p-inputNumber>
+                </div>
+
+                <!-- Period -->
+                <div>
+                    <label class="font-semibold mb-1 block">Period (Months)</label>
+                    <p-inputNumber [(ngModel)]="period" name="period" class="w-full" required>
+                    </p-inputNumber>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="font-semibold mb-1 block">Description</label>
+                    <textarea pInputTextarea rows="3" [(ngModel)]="description" name="description" class="w-full"
+                        required>
+                </textarea>
+                </div>
+
+                <!-- Features -->
+                <div>
+                    <label class="font-semibold mb-1 block">Features</label>
+                    <textarea pInputTextarea rows="2" [(ngModel)]="features" name="features" class="w-full" required>
+                </textarea>
+                </div>
+
+                <!-- Disabled Features -->
+                <div>
+                    <label class="font-semibold mb-1 block">Disabled Features</label>
+                    <textarea pInputTextarea rows="2" [(ngModel)]="disabled_features" name="disabled_features"
+                        class="w-full" required>
+                </textarea>
+                </div>
+
+                <!-- Status -->
+                <div>
+                    <label class="font-semibold mb-1 block">Status</label>
+                    <p-select [options]="statusOptions" [(ngModel)]="status" name="status" placeholder="Select status"
+                        class="w-full">
+                    </p-select>
+                </div>
+
+            </div>
+
+            <!-- Footer -->
+            <div class="flex justify-end mt-6">
+                <button pButton type="submit" label="Create Package" class="p-button-primary">
+                </button>
+            </div>
+        </form>
+</p-dialog>
+
+<!-- Edit Package Dialog -->
+<p-dialog header="Edit Package" [(visible)]="showEditDialog" [modal]="true" [style]="{ width: '35rem' }"
+    [draggable]="false">
+    <form #f="ngForm" (ngSubmit)="updatePackage(f)" class="space-y-3">
+       
+            <div class="flex flex-col gap-4">
+
+                <!-- Name -->
+                <div>
+                    <label class="font-semibold mb-1 block">Name</label>
+                    <input pInputText name="name" [(ngModel)]="editingdata.name" required class="w-full" />
+                </div>
+
+                <!-- Price -->
+                <div>
+                    <label class="font-semibold mb-1 block">Price</label>
+                    <p-inputNumber [(ngModel)]="editingdata.price" name="price" mode="decimal" class="w-full" required>
+                    </p-inputNumber>
+                </div>
+
+                <!-- Discount -->
+                <div>
+                    <label class="font-semibold block mb-2">Discount(Yes / No )</label>
+
+                    <div class="flex gap-6">
+                        <div class="flex items-center gap-2">
+                            <p-radioButton name="isdiscount" [value]="true" [(ngModel)]="editingdata.isdiscount">
+                            </p-radioButton>
+                            <label>Yes</label>
+                        </div>
+
+                        <div class="flex items-center gap-2">
+                            <p-radioButton name="isdiscount" [value]="false" [(ngModel)]="editingdata.isdiscount">
+                            </p-radioButton>
+                            <label>No</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Discounted Price -->
+                <div *ngIf="isdiscount">
+                    <label class="font-semibold mb-1 block">Discounted Price</label>
+                    <p-inputNumber [(ngModel)]="editingdata.discountedprice" name="discountedprice" class="w-full" required>
+                    </p-inputNumber>
+                </div>
+
+                <!-- Period -->
+                <div>
+                    <label class="font-semibold mb-1 block">Period (Months)</label>
+                    <p-inputNumber [(ngModel)]="period" name="editingdata.period" class="w-full" required>
+                    </p-inputNumber>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="font-semibold mb-1 block">Description</label>
+                    <textarea pInputTextarea rows="3" [(ngModel)]="editingdata.description" name="description" class="w-full"
+                        required>
+                </textarea>
+                </div>
+
+                <!-- Features -->
+                <div>
+                    <label class="font-semibold mb-1 block">Features</label>
+                    <textarea pInputTextarea rows="2" [(ngModel)]="editingdata.features" name="features" class="w-full" required>
+                </textarea>
+                </div>
+
+                <!-- Disabled Features -->
+                <div>
+                    <label class="font-semibold mb-1 block">Disabled Features</label>
+                    <textarea pInputTextarea rows="2" [(ngModel)]="editingdata.disabled_features" name="disabled_features"
+                        class="w-full" required>
+                </textarea>
+                </div>
+
+                <!-- Status -->
+                <div>
+                    <label class="font-semibold mb-1 block">Status</label>
+                    <p-select [options]="statusOptions" [(ngModel)]="editingdata.status" name="status" placeholder="Select status"
+                        class="w-full">
+                    </p-select>
+                </div>
+
+            </div>
+
+            <!-- Footer -->
+            <div class="flex justify-end mt-6">
+                <button pButton type="submit" label="Create Package" class="p-button-primary">
+                </button>
+            </div>
+    </form>
+</p-dialog>
+
+<p-toast />
+<p-confirmDialog></p-confirmDialog>

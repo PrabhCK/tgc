@@ -1,0 +1,79 @@
+<p-card *ngIf="strategyList.length == 0" class="shadow-sm rounded-2xl border border-gray-200 pt-5 text-center">
+  No strategies available !!
+</p-card>
+
+<!-- Cards Grid Wrapper -->
+<div class="grid" *ngIf="strategyList.length > 0">
+
+  <!-- Each Card Column -->
+  <div class="col-12 md:col-6 lg:col-4 mb-3" *ngFor="let i of strategyList; let idx = index">
+    <p-card class="shadow-sm rounded-2xl border border-gray-200 mt-3">
+
+      <div class="grid md:grid-cols-12 gap-4 items-start p-4">
+        
+        <!-- Image -->
+        <div class="md:col-span-3 flex justify-center md:justify-start">
+          <img [src]="i.img" (error)="onImgError($event)" alt="{{ i.title }}"
+            class="rounded-lg w-[250px] h-[160px] object-cover" />
+        </div>
+
+        <!-- Text + Actions -->
+        <div class="md:col-span-9 space-y-3">
+          <h5 class="text-xl font-semibold text-blue-600">{{ i.title }}</h5>
+
+          <div class="grid md:grid-cols-12 items-center">
+            <div class="md:col-span-10">
+              <p class="text-gray-600 text-justify" [innerHTML]="i.description"></p>
+            </div>
+
+            <div *ngIf="!i.issubscribed" class="md:col-span-2 flex justify-center" (click)="subscribe(i)">
+              <p-button label="Subscribe" icon="pi pi-bell" class="p-button-warning text-black"></p-button>
+            </div>
+          </div>
+
+          <!-- Subscribed Section -->
+          <div *ngIf="i.issubscribed" class="grid md:grid-cols-12 gap-4 mt-4">
+            <div class="md:col-span-3 space-y-2">
+              <label class="font-semibold flex items-center gap-1">
+                Trading
+                <i class="pi pi-info-circle text-gray-500" pTooltip="{{ tooltipforStatus }}" tooltipPosition="top"></i>
+              </label>
+
+              <div class="flex items-center gap-4">
+                <div class="flex items-center gap-1">
+                  <p-radioButton [inputId]="'startYes_' + idx" [name]="'startTrading_' + idx" [value]="true"
+                    [(ngModel)]="i.start_trading" (onClick)="confirm(i)"></p-radioButton>
+                  <label [for]="'startYes_' + idx" class="cursor-pointer">Start</label>
+                </div>
+
+                <div class="flex items-center gap-1">
+                  <p-radioButton [inputId]="'startNo_' + idx" [name]="'startTrading_' + idx" [value]="false"
+                    [(ngModel)]="i.start_trading" (onClick)="confirm(i)"></p-radioButton>
+                  <label [for]="'startNo_' + idx" class="cursor-pointer">Stop</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="md:col-span-3 space-y-2">
+              <label class="font-semibold flex items-center gap-1">
+                No. of Lots
+                <i class="pi pi-info-circle text-gray-500" pTooltip="Number of lots you want to trade." tooltipPosition="top"></i>
+              </label>
+
+              <p-select [options]="i.numbers" [(ngModel)]="i.quantity" (onChange)="confirm(i)"
+                placeholder="Select Lot" class="w-full"></p-select>
+            </div>
+          </div>
+
+          <h6 *ngIf="!i.issubscribed" class="text-red-500 text-sm font-medium mt-3">
+            * Please subscribe to the package to start trading in this strategy.
+          </h6>
+        </div>
+      </div>
+
+    </p-card>
+  </div>
+
+</div>
+<p-confirmDialog></p-confirmDialog>
+<p-toast />
