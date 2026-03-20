@@ -45,62 +45,62 @@
                     <tbody>
                         <tr *ngFor="let data of table_data">
 
-                            <td class="center" ngClass="{{ data.ce_oi_trend_css }}" *ngIf="data.ce_oi_int != 'NA'"
+                            <td class="center" [ngClass]="[data.ce_common_css || '', '']" *ngIf="data.ce_oi_int != 'NA'"
                                 title="{{data.ce_oi_int}}">
                                 <p [ngClass]="viewClassMap[data.ce_oi_int] || 'p-2 text-center'">{{
-                                    data.ce_oi_int === 'Short Buildup' ? 'SB' :
-                                    data.ce_oi_int === 'Long Buildup' ? 'LB' :
-                                    data.ce_oi_int === 'Short Covering' ? 'SC' :
-                                    data.ce_oi_int === 'Long Unwinding' ? 'LU' : '-'
+                                    data.ce_oi_int === 'SB' ? 'SB' :
+                                    data.ce_oi_int === 'LB' ? 'LB' :
+                                    data.ce_oi_int === 'SC' ? 'SC' :
+                                    data.ce_oi_int === 'LU' ? 'LU' : '-'
                                     }}</p>
                             </td>
-                            <td class="center" ngClass="{{ data.ce_oi_int_css }}" *ngIf="data.ce_oi_int == 'NA'">
+                            <td class="center" [ngClass]="[data.ce_common_css || '', '']" *ngIf="data.ce_oi_int == 'NA'">
                                 {{ data.ce_oi_int }}
                             </td>
-                            <td class="center" ngClass="{{ data.ce_oi_css }}">
+                            <td class="center"[ngClass]="[data.ce_common_css || '', data.ce_oi_css || '']">
                                 {{ data.ce_oi | prefix }}
                             </td>
-                            <td class="center" ngClass="{{ data.ce_vol_css }}">
+                            <td class="center" [ngClass]="[data.ce_common_css || '', data.ce_vol_css || '']">
                                 {{ data.ce_vol | number:'1.2-2' }}
                             </td>
 
-                            <td class="center" ngClass="{{ data.ce_oi_chg_css }}">
-                                {{ data.ce_oi_chg | prefix }}
+                            <td class="center" [ngClass]="[data.ce_common_css || '', data.ce_oichg_css || '']">
+                                {{ data.ce_oichg | prefix }}
                             </td>
-                            <td class="center" ngClass="{{ data.ce_ltp_css }}">
+                            <td class="center" [ngClass]="[data.ce_common_css || '', data.ce_ltp_css || '']">
                                 {{ data.ce_ltp | number:'1.2-2' }}
                             </td>
-                            <td ngClass="{{ data.ce_ltp_css }}">
+                            <td >
                                 <p-button class="me-1 py-1" label="B" severity="success"
                                     (click)="openPlaceOrder(data,'CE','buy')" />
                                 <p-button label="S" severity="danger" (click)="openPlaceOrder(data,'CE','sell')" />
                             </td>
                             <td class="center yellow-bg dark:text-gray-900">
-                                <strong>{{ data.strike_price | number }}</strong>
+                                <strong>{{ data.sp | number }}</strong>
                             </td>
-                            <td class="center" ngClass="{{ data.pe_ltp_css }}">
+                            <td class="center">
                                 <p-button class="me-1 py-1" label="B" severity="success"
                                     (click)="openPlaceOrder(data,'PE','buy')" />
                                 <p-button label="S" severity="danger" (click)="openPlaceOrder(data,'PE','sell')" />
                             </td>
-                            <td class="center" ngClass="{{ data.pe_ltp_css }}">
+                            <td class="center" [ngClass]="[data.pe_common_css || '' , data.pe_ltp_css || '']">
                                 {{ data.pe_ltp | number:'1.2-2'}}
                             </td>
-                            <td class="center" ngClass="{{ data.pe_oi_chg_css }}">
-                                {{ data.pe_oi_chg | prefix }}
+                            <td class="center" [ngClass]="[data.pe_common_css || '' , data.pe_oichg_css || '']">
+                                {{ data.pe_oichg | prefix }}
                             </td>
-                            <td class="center" ngClass="{{ data.pe_vol_css }}">
+                            <td class="center" [ngClass]="[data.pe_common_css || '' , data.pe_vol_css || '']">
                                 {{ data.pe_vol | prefix }}
                             </td>
-                            <td class="center" ngClass="{{ data.pe_oi_css }}">
+                            <td class="center" [ngClass]="[data.pe_common_css || '' , data.pe_oi_css || '']">
                                 {{ data.pe_oi | prefix }}
                             </td>
                             <td class="center" ngClass="{{ data.pe_oi_trend_css }}" *ngIf="data.pe_oi_int != 'NA'">
                                 <p [ngClass]="viewClassMap[data.pe_oi_int] || 'p-2 text-center'">{{
-                                    data.pe_oi_int === 'Short Buildup' ? 'SB' :
-                                    data.pe_oi_int === 'Long Buildup' ? 'LB' :
-                                    data.pe_oi_int === 'Short Covering' ? 'SC' :
-                                    data.pe_oi_int === 'Long Unwinding' ? 'LU' : '-'
+                                    data.pe_oi_int === 'SB' ? 'SB' :
+                                    data.pe_oi_int === 'LB' ? 'LB' :
+                                    data.pe_oi_int === 'SC' ? 'SC' :
+                                    data.pe_oi_int === 'LU' ? 'LU' : '-'
                                     }}</p>
                             </td>
                             <td class="px-2 py-1" ngClass="{{ data.pe_oi_int_css }}" *ngIf="data.pe_oi_int == 'NA'">
@@ -114,19 +114,28 @@
                         </tr>
                         <tr>
                             <td class="font-bold py-4 center">Total</td>
-                            <td class="font-bold py-4 center">{{totalData?.total_ce_oi | prefix}}</td>
-                            <td class="font-bold py-4 center">{{totalData?.total_ce_vol | prefix }}</td>
-                            <td class="font-bold py-4 center">{{totalData?.total_ce_oi_chg | prefix}}</td>
-                            <td class="font-bold py-4 center">{{totalData?.total_ce_ltp | prefix}}</td>
+                            <td class="font-bold py-4 center">{{totalData?.[2]| prefix}}</td>
+                            <td class="font-bold py-4 center">{{totalData?.[4]| prefix}}</td>
+                            <td class="font-bold py-4 center" [ngClass]="{
+        'green-font': totalData?.[6] >0,
+       'red-font': totalData?.[6] <0  }">{{totalData?.[6]| prefix}}</td>
+                            <td class="font-bold py-4 center"
+                            [ngClass]="{
+        'green-font': totalData?.[8] >0,
+       'red-font': totalData?.[8] <0  }">{{totalData?.[8]| prefix}}</td>
                             <td class="font-bold py-4 center">-</td>
                             <td class="font-bold py-4 center">-</td>
                             <td class="font-bold py-4 center">-</td>
-                            <td class="font-bold py-4 center">{{totalData?.total_pe_ltp | prefix}}</td>
-                            <td class="font-bold py-4 center">{{totalData?.total_pe_oi_chg | prefix}}</td>
-                            <td class="font-bold py-4 center">{{totalData?.total_pe_vol| prefix}}</td>
-                            <td class="font-bold py-4 center">{{totalData?.total_pe_oi | prefix}}</td>
+                            <td class="font-bold py-4 center" [ngClass]="{
+        'green-font': totalData?.[13] >0,
+       'red-font': totalData?.[13] <0  }">{{totalData?.[13]| prefix}}</td>
+                            <td class="font-bold py-4 center" [ngClass]="{
+        'green-font': totalData?.[15] >0,
+       'red-font': totalData?.[15] <0  }">{{totalData?.[15]| prefix}}</td>
+                            <td class="font-bold py-4 center">{{totalData?.[17]| prefix}}</td>
+                            <td class="font-bold py-4 center">{{totalData?.[20]| prefix}}</td>
                             <td class="font-bold py-4 center">-</td>
-                            <td class="font-bold py-4 center">{{totalData?.total_pcr_oi | prefix}}</td>
+                            <td class="font-bold py-4 center">{{totalData?.[23]| prefix}}</td>
                         </tr>
                     </tbody>
                 </table>

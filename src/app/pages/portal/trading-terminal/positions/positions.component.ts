@@ -40,7 +40,7 @@ export class PositionsComponent implements OnInit, AfterViewInit, OnDestroy {
   ];
 
   statusopen: any = 'OPEN';
-  socket = io(environment.socketUrl1, {});
+  socket = io(environment.socketUrl, {});
 
   selectedRows: any[] = [];
   toast = inject(MessageService);

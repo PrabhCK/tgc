@@ -78,7 +78,7 @@ export class PortalService {
   }
 
   getOptionChainData(stockname: any, timeframe: any, expiry_selected_date: any, selected_date: any) {
-    return this.http.get(environment.baseurl + '/options/optionchain?stockname=' + stockname +
+    return this.http.get(environment.baseurl + '/options/v2/optionchain?stockname=' + stockname +
       '&interval=' + timeframe + '&expirydate=' + expiry_selected_date + '&date=' + selected_date);
   }
 

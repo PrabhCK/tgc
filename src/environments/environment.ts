@@ -9,7 +9,6 @@ export const environment = {
   accountUrl:'https://api.tradersgurukulcenter.in',
   key:'rzp_live_AuIkGp11YylHUI',
   pmusername:'tgc',
-  socketUrl1:'https://stream.nsepay.in'
 };
 
 /*

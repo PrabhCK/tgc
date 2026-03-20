@@ -20,7 +20,7 @@ import { CardModule } from 'primeng/card';
   imports: [CommonModule, TableModule, FormsModule, SelectModule, DatePickerModule, NgxEchartsModule, ButtonModule, DatePickerModule, InputTextModule, CardModule],
 })
 export class PreopenMarketComponent {
-  baseurl = environment.baseurl + '/preopen/stocks_data';
+  baseurl = environment.baseurl + '/preopen/v2/stocks_data';
   endpoint = environment.baseurl;
   stocks = [
     { label: 'NIFTY', value: 'NIFTY' },
@@ -143,6 +143,14 @@ export class PreopenMarketComponent {
     );
   }
 
+  transformData(data: any) {
+    return data.o.map((row: any[]) =>
+      Object.fromEntries(
+        data.k.map((key: string, i: number) => [key, row[i]])
+      )
+    );
+  }
+
   datachange() {
     this.getStockData();
     this.getIndicesData();
@@ -160,6 +168,9 @@ export class PreopenMarketComponent {
         .subscribe(
           (result) => {
             this.tdata = result;
+                        this.tdata.posstocks = this.transformData({ k: this.tdata.k, o: this.tdata.posstocks });
+            this.tdata.negstocks = this.transformData({ k: this.tdata.k, o: this.tdata.negstocks });
+
             this.updateOptions = {
               series: [
                 {
@@ -197,13 +208,16 @@ export class PreopenMarketComponent {
     if (this.selected_date) {
       this.http.get(
         this.endpoint +
-        '/preopen/indices_data?indexname=' +
+        '/preopen/v2/indices_data?indexname=' +
         this.indices +
         '&date=' +
         moment(this.selected_date).format('YYYY-MM-DD')
       )
         .subscribe((result) => {
           this.indicedata = result;
+                    this.indicedata.posstocks = this.transformData({ k: this.indicedata.k, o: this.indicedata.posstocks });
+          this.indicedata.negstocks = this.transformData({ k: this.indicedata.k, o: this.indicedata.negstocks });
+
           if (this.indicedata.posstocks.length > 0) {
             // this.rerender();
           }

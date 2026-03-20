@@ -5,80 +5,68 @@
     color: green;
 }
 
-.grey-bg-black-font {
+.gbg {
     background-color: #ede1ff;
     color: #000;
 }
-.grey-bg-blue-font {
+.gbgbf {
     background-color: #ede1ff;
     color: #0b5394;
 }
 
-.white-bg-blue-font {
+.wbgbf {
     background-color: var(--surface-color);
     color: #0b5394;
 }
 
-.white-bg-green-font {
+.wbggrf {
     background-color: var(--surface-color);
     border-radius: 10px;
     color: green;
 }
-.white-bg-red-font {
+.wbgrf {
     background-color: var(--surface-color);
     border-radius: 10px;
     color: red;
 }
 
-.red-bg-black-font {
+.rbgwf {
     background-color: red;
     border-radius: 10px;
-    color: #000;
+    color: white;
 }
 
-.red-bg-white-font {
-    background-color: red;
-    border-radius: 10px;
-    color: #fff;
-}
-
-.grey-bg-green-font {
+.gbggrf {
     background-color: #ede1ff;
     color: green;
 }
-.grey-bg-red-font {
+.gbgrf {
     background-color: #ede1ff;
     color: #f5515f;
 }
 
-.yellow-bg-red-font {
+.ybgrf {
     background-color: #ffeeba;
     color: #f5515f;
 }
 
-.yellow-bg-green-font {
+.ybggrf {
     background-color: #ffeeba;
     color: green;
 }
-.yellow-bg-black-font {
+.ybgbf {
     background-color: #ffeeba;
     color: #000;
 }
-.yellow-bg-blue-font {
+.ybgbf {
     background-color: #ffeeba;
     color: #0b5394;
 }
 
-.green-bg-white-font {
+.grbgwf {
     background-color: green;
     border-radius: 10px;
     color: #fff;
-}
-
-.green-bg-black-font {
-    background-color: green;
-    border-radius: 10px;
-    color: #000;
 }
 
 .longbuildup {

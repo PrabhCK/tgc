@@ -42,7 +42,7 @@ export class StreamingData implements OnInit {
   displayDialog!: boolean;
   view = 'ltp';
   // socket = io(environment.socketUrl, {});
-  socket1 = io('https://stream.nsepay.in', {});
+  socket1 = io(environment.socketUrl, {});
 
   stockname: any = 'NIFTY';
   prevStockName: any = 'NIFTY';
@@ -107,20 +107,28 @@ export class StreamingData implements OnInit {
       this.getStocknames();
       this.socket1.on('data', (dt: any) => {
         console.log(dt)
-        this.totalData = dt;
-        this.table_data = dt.options;
-        this.tdata.spot_ltp = dt.spot.ltp;
-        this.tdata.spot_change = dt.spot.ltp_chg;
-        this.tdata.spot_change_per = dt.spot.pchg;
+        if (dt.t.length > 0) {
+          this.totalData = dt.t;
+
+        }
+        if (dt.o.length > 0) {
+          this.table_data = this.transformData(dt);
+        }
+        if (dt.sp.length > 0) {
+          this.tdata.spot_ltp = dt.sp[2];
+          this.tdata.spot_change = dt.sp[3];
+          this.tdata.spot_change_per = dt.sp[4];
+        }
       });
       this.socket1.emit('currentdata', {
-        lastDailyBar: this.stockname + '_OC'
+        lastDailyBar: this.stockname + '_OS'
       });
     }
 
   }
 
   ngOnInit() {
+    this.stockchange(this.stockname);
 
     // this.dtOptions[0] = {
     //   pagingType: 'full_numbers',
@@ -128,19 +136,12 @@ export class StreamingData implements OnInit {
     //   ordering: false,
     // };
   }
-
-  oianalysis() {
-
-  }
-
-  tick() {
-    this.secondtimerSubscription = timer(0, 60000)
-      .pipe(
-        map(() => {
-          this.oianalysis();
-        })
+  transformData(data: any) {
+    return data.o.map((row: any[]) =>
+      Object.fromEntries(
+        data.k.map((key: string, i: number) => [key, row[i]])
       )
-      .subscribe();
+    );
   }
 
   getStocknames() {
@@ -171,11 +172,11 @@ export class StreamingData implements OnInit {
 
       if (this.prevStockName) {
         this.socket1.emit('unsubscribe_symbol', {
-          symbol: this.prevStockName + '_OC',
+          symbol: this.prevStockName + '_OS',
         });
       }
       this.socket1.emit('subscribe_symbol', {
-        symbol: selectedStock.value + '_OC',
+        symbol: selectedStock.value + '_OS',
       });
 
       this.prevStockName = selectedStock.value;
@@ -303,18 +304,11 @@ export class StreamingData implements OnInit {
     }
   }
 
-  viewChart(strikeprice: any, optionTypeValue: any) {
-    // const modalRef = this.modalService.open(ChartModalComponent, { size: 'xl' });
-    // modalRef.componentInstance.symbolFromChain = this.stockname + this.commonService.formatExpiryDate(this.expiry_selected_date) +
-    //   strikeprice + optionTypeValue;
-  }
-
-
   viewClassMap: Record<string, string> = {
-    'Short Buildup': 'shortbuildup',
-    'Long Buildup': 'longbuildup',
-    'Short Covering': 'shortcovering',
-    'Long Unwinding': 'longunwinding',
+    'SB': 'shortbuildup',
+    'LB': 'longbuildup',
+    'SC': 'shortcovering',
+    'LU': 'longunwinding',
   };
 
 

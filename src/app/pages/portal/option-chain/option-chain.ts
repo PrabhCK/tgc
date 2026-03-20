@@ -88,6 +88,7 @@ export class OptionChain implements OnInit, OnDestroy {
   producttype: any;
   loginid: any;
   displayDialog!: boolean;
+  totalData: any;
   // stream = false;
 
   constructor(
@@ -103,7 +104,7 @@ export class OptionChain implements OnInit, OnDestroy {
     this.userdata = JSON.parse(localStorage.getItem('user') || '{}');
     this.token = this.userdata.accesstoken;
     this.stocklist = Constants.stocks;
-    if (this.userdata?.packagename == 'PRO TRADER' ) { //if usr
+    if (this.userdata?.packagename == 'PRO TRADER') { //if usr
       this.getDate();
       this.getData();
       this.getTableData();
@@ -112,7 +113,7 @@ export class OptionChain implements OnInit, OnDestroy {
   }
 
   getData() {
-    if (this.userdata?.packagename == 'PRO TRADER' ) { //if usr
+    if (this.userdata?.packagename == 'PRO TRADER') { //if usr
       this.socket.on('data', (data) => {
         console.log(data);
         this.tdata.spot_ltp = data.spot_ltp;
@@ -141,30 +142,18 @@ export class OptionChain implements OnInit, OnDestroy {
     }
   }
 
-  initialfetch() {
-    this.pservice.getOptionChainData(this.stockname, this.timeframe, this.expiry_selected_date, moment(this.selected_date).format('YYYY-MM-DD'))
-      .subscribe(
-        (res: any) => {
-          this.tdata = res;
-          this.table_data = this.tdata.data;
-          this.loaded = true;
-        },
-        (err) => {
-          let message = this.errorhandler.handleError(err);
-          this.toast.add({ severity: 'error', summary: 'Alert', detail: message });
-        }
-      );
-  }
-
   getOptionChainData() {
     // if (!this.stream) {
     if (this.stockname && this.timeframe && this.expiry_selected_date && this.selected_date) {
       this.pservice.getOptionChainData(this.stockname, this.timeframe, this.expiry_selected_date, moment(this.selected_date).format('YYYY-MM-DD'))
 
         .subscribe(
-          (result) => {
-            this.tdata = result;
-            this.table_data = this.tdata.data;
+          (result:any) => {
+            // this.tdata = result;
+            // this.table_data = this.tdata.data;
+            this.table_data = this.transformData(result);
+                        this.totalData = result.t;
+
             this.loaded = true;
           },
           (err) => {
@@ -173,6 +162,14 @@ export class OptionChain implements OnInit, OnDestroy {
           }
         );
     }
+  }
+
+  transformData(data: any) {
+    return data.data.map((row: any[]) =>
+      Object.fromEntries(
+        data.k.map((key: string, i: number) => [key, row[i]])
+      )
+    );
   }
 
   tick() {
@@ -186,12 +183,11 @@ export class OptionChain implements OnInit, OnDestroy {
   }
 
   viewClassMap: Record<string, string> = {
-    'Short Buildup': 'shortbuildup',
-    'Long Buildup': 'longbuildup',
-    'Short Covering': 'shortcovering',
-    'Long Unwinding': 'longunwinding',
+    'SB': 'shortbuildup',
+    'LB': 'longbuildup',
+    'SC': 'shortcovering',
+    'LU': 'longunwinding',
   };
-
 
 
   getDate() {
@@ -271,7 +267,7 @@ export class OptionChain implements OnInit, OnDestroy {
   openPlaceOrder(data: any, type: any, ordertype: any) {
     if (this.loginid) {
       this.type = ordertype;
-      this.symbolsearch = `${this.stockname.toUpperCase()} ${this.formatDate(this.expiry_selected_date)} ${data.strikeprice} ${type}`;
+      this.symbolsearch = `${this.stockname.toUpperCase()} ${this.formatDate(this.expiry_selected_date)} ${data.sp} ${type}`;
       this.displayDialog = true;
       this.search(this.symbolsearch);
     } else {
@@ -373,11 +369,7 @@ export class OptionChain implements OnInit, OnDestroy {
     }
   }
 
-  viewChart(strikeprice: any, optionTypeValue: any) {
-    // const modalRef = this.modalService.open(ChartModalComponent, { size: 'xl' });
-    // modalRef.componentInstance.symbolFromChain = this.stockname + this.commonService.formatExpiryDate(this.expiry_selected_date) +
-    //   strikeprice + optionTypeValue;
-  }
+  
 
   ngOnDestroy() {
     if (this.secondtimerSubscription != undefined) {

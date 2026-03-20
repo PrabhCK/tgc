@@ -27,7 +27,7 @@ export class WatchlistComponent implements OnInit, OnDestroy {
   searchTerm = '';
   showResults = false;
   filteredStocks: any;
-  socket = io(environment.socketUrl1, {});
+  socket = io(environment.socketUrl, {});
   autocompleteOpen = false;  // Flag to manage open/close state of autocomplete
   ref: DynamicDialogRef | undefined;
 
