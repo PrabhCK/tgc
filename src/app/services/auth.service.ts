@@ -14,6 +14,7 @@ export class AuthService implements OnDestroy {
   // private fields
   private unsubscribe: Subscription[] = []; // Read more: => https://brianflove.com/2016/12/11/anguar-2-unsubscribe-observables/
   private authLocalStorageToken: any = 'user';
+  private disclaimerLocalStorageKey = 'disclaimerAccepted';
 
   // public fields
   currentUser$: Observable<any>;
@@ -65,6 +66,8 @@ export class AuthService implements OnDestroy {
 
   logout() {
     localStorage.removeItem(this.authLocalStorageToken);
+    this._setDisclaimerAcceptedLocally(false);
+    this.currentUserSubject.next(undefined);
     this.router.navigate(['/home'], {
       queryParams: {},
     });
@@ -122,6 +125,8 @@ export class AuthService implements OnDestroy {
     // store auth accessToken/refreshToken/epiresIn in local storage to keep user logged in between page refreshes
     if (auth && auth.accesstoken) {
       localStorage.setItem(this.authLocalStorageToken, JSON.stringify(auth));
+      this._setDisclaimerAcceptedLocally(false);
+      this.currentUserSubject.next(auth);
       return auth;
     }
     return false;
@@ -139,6 +144,28 @@ export class AuthService implements OnDestroy {
 
   public loggedIn() {
     return localStorage.getItem('user');
+  }
+
+  public hasAcceptedDisclaimer(): boolean {
+    return localStorage.getItem(this.disclaimerLocalStorageKey) === 'true';
+  }
+
+  public setDisclaimerAccepted(status: boolean): void {
+    const subscription = this.http
+      .post(environment.baseurl + '/user/disclaimer/agree', { accepted: status })
+      .subscribe(
+        () => {
+          localStorage.setItem(this.disclaimerLocalStorageKey, String(status));
+        },
+        (error) => {
+          console.error('Error accepting disclaimer:', error);
+        }
+      );
+    this.unsubscribe.push(subscription);
+  }
+
+  private _setDisclaimerAcceptedLocally(status: boolean): void {
+    localStorage.setItem(this.disclaimerLocalStorageKey, String(status));
   }
 
 

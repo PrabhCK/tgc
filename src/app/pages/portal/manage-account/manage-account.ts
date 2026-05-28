@@ -51,13 +51,14 @@ export class ManageAccount implements OnInit {
   isAccountDataRecieved!: boolean;
   stocklist = [
     { name: 'aliceblue', image: 'https://takeiteasy.co.in/assets/aliceblue.png', brokerage: 20, link: 'https://ekyc.aliceblueonline.com/?source=SVZG285' },
-    {name: 'bajaj',image:'/assets/bajaj.png'}
+    {name: 'bajaj',image:'/assets/bajaj.png'},
+    {name:'Pocketful',image:'/assets/pocketful.svg'},
     // { name: 'angelbroking', image: 'https://takeitheze.in/assets/angel.png', brokerage: 20, link: 'https://tinyurl.com/22oewf7a' },
   ];
   stockBrokers=[
-    {label:'ALICEBLUE',value:'ALICEBLUE'}
+    {label:'ALICEBLUE',value:'ALICEBLUE'},
+    {label:'POCKETFUL',value:'POCKETFUL'}
   ];
-  
   toast = inject(MessageService);
 
   constructor(
@@ -239,6 +240,16 @@ export class ManageAccount implements OnInit {
           // totpkey:this.accountForm.value.totpkey
         };
       }
+      if (this.accountForm.getRawValue().stockbroker == 'POCKETFUL') {
+        data = {
+          stockbroker: this.accountForm.getRawValue().stockbroker,
+          loginid: this.accountForm.getRawValue().loginid,
+          password: this.accountForm.getRawValue().password,
+          password2fa: this.accountForm.getRawValue().password2fa,
+          totpkey: this.accountForm.getRawValue().totpkey,
+          autologin: this.accountForm.getRawValue().autologin,
+        };
+      }
       if (this.accountForm.getRawValue().stockbroker == 'STOXKART') {
         delete data.password2fa
       }
@@ -282,19 +293,28 @@ export class ManageAccount implements OnInit {
         this.toast.add({ severity: 'error', summary: 'Alert', detail: 'Enter Password' });
 
       } else if (
-        this.accountForm.getRawValue().appid == '' ||
-        this.accountForm.getRawValue().appid == null ||
-        this.accountForm.getRawValue().appid == undefined
+        (this.accountForm.getRawValue().password2fa == '' ||
+          this.accountForm.getRawValue().password2fa == null ||
+          this.accountForm.getRawValue().password2fa == undefined) &&
+        this.autologin &&
+        this.accountForm.get('stockbroker').getRawValue() == 'POCKETFUL'
+      ) {
+        this.toast.add({ severity: 'error', summary: 'Alert', detail: 'Enter PIN' });
+      } else if (
+        (this.accountForm.getRawValue().appid == '' ||
+          this.accountForm.getRawValue().appid == null ||
+          this.accountForm.getRawValue().appid == undefined) &&
+        this.accountForm.get('stockbroker').getRawValue() != 'POCKETFUL'
       ) {
         this.toast.add({ severity: 'error', summary: 'Alert', detail: 'Enter App Key' });
-      }  else if (
-        this.accountForm.getRawValue().appkey == '' ||
-        this.accountForm.getRawValue().appkey == null ||
-        this.accountForm.getRawValue().appkey == undefined
+      } else if (
+        (this.accountForm.getRawValue().appkey == '' ||
+          this.accountForm.getRawValue().appkey == null ||
+          this.accountForm.getRawValue().appkey == undefined) &&
+        this.accountForm.get('stockbroker').getRawValue() != 'POCKETFUL'
       ) {
         this.toast.add({ severity: 'error', summary: 'Alert', detail: 'Enter App Secret Key' });
-      }
-      else if (
+      } else if (
         (this.accountForm.getRawValue().totpkey == '' ||
           this.accountForm.getRawValue().totpkey == null ||
           this.accountForm.getRawValue().totpkey == undefined) &&
@@ -327,6 +347,16 @@ export class ManageAccount implements OnInit {
             password2fa: this.accountForm.getRawValue().password2fa,
             totpkey: this.accountForm.getRawValue().totpkey,
           };
+          if (this.accountForm.getRawValue().stockbroker == 'POCKETFUL') {
+            data = {
+              stockbroker: this.accountForm.getRawValue().stockbroker,
+              loginid: this.accountForm.getRawValue().loginid,
+              password: this.accountForm.getRawValue().password,
+              password2fa: this.accountForm.getRawValue().password2fa,
+              totpkey: this.accountForm.getRawValue().totpkey,
+              autologin: this.accountForm.getRawValue().autologin,
+            };
+          }
         }
         // } else {
         //   data = {

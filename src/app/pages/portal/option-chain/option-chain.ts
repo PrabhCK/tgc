@@ -38,7 +38,7 @@ import { environment } from 'src/environments/environment';
 export class OptionChain implements OnInit, OnDestroy {
 
   socket = io(environment.socketUrl, {});
-  socket1 = io('https://stream.nsepay.in', {});
+  socket1 = io('https://stream.tradingbul.com', {});
 
 
   stockname: any = 'NIFTY';

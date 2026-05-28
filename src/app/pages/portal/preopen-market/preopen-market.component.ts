@@ -46,7 +46,7 @@ export class PreopenMarketComponent {
   token: any;
   stocklist: any;
   timeframes: any;
-
+  
   table_data: any = [
     {
       lb: [],

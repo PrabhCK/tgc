@@ -4,11 +4,13 @@
 
 export const environment = {
   production: false,
-  baseurl: 'https://api.tradersgurukulcenter.in',
-  socketUrl:'https://stream.nsepay.in',
-  accountUrl:'https://api.tradersgurukulcenter.in',
+  baseurl: 'https://api.tradingbul.com',
+  socketUrl:'https://stream.tradingbul.com',
+  accountUrl:'https://api.tradingbul.com',
   key:'rzp_live_AuIkGp11YylHUI',
   pmusername:'tgc',
+    version:'1.0.0' // Add a version property to the environment
+
 };
 
 /*

@@ -11,7 +11,7 @@ import { AppFloatingConfigurator } from '../../../layout/component/app.floatingc
         <div class="flex items-center justify-center min-h-screen overflow-hidden">
             <div class="flex flex-col items-center justify-center">
                <div  class="flex justify-center">
-                                            <img src="assets/images/white_logo.gif" style="height: 100px;width: 184px; text-align: center;">
+                                            <img src="assets/logo.png" style="height: 100px;width: 184px; text-align: center;">
 
                     </div>
                 <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, color-mix(in srgb, var(--primary-color), transparent 60%) 10%, var(--surface-ground) 30%)">
